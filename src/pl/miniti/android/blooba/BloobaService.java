@@ -1,3 +1,9 @@
+/**
+ * BloobaService.java
+ * Author: marek.brodziak@gmail.com
+ * Created: Feb 4, 2014
+ * Copyright 2014 by miniti
+ */
 package pl.miniti.android.blooba;
 
 import android.content.Context;
@@ -16,33 +22,46 @@ import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
+/**
+ * Wallpaper service for Blooba which handles instantiation of the Blooba object according to user
+ * prefernces and callbacks in regards to the external systems like touch events, sensors, etc.
+ */
 public class BloobaService extends WallpaperService {
 
-	private SensorManager	sensorManager;
-	private Sensor			gravitySensor;
+	private SensorManager sensorManager;
+	private Sensor gravitySensor;
 
+	/**
+	 * 
+	 */
 	@Override
 	public Engine onCreateEngine() {
 		return new BloobaEngine();
 	}
 
+	/**
+	 */
 	private class BloobaEngine extends Engine implements SensorEventListener {
-		private final Handler	handler			= new Handler();
-		private final Runnable	drawRunner		= new Runnable() {
-													@Override
-													public void run() {
-														draw();
-													}
+		private final Handler handler = new Handler();
+		private final Runnable drawRunner = new Runnable() {
 
-												};
-		private Blooba			blooba;
-		private boolean			visible			= true;
-		private boolean			touchEnabled	= true;
-		private boolean			gravityEnabled	= true;
-		private int				quality			= 40;
-		private int				size			= 400;
-		private int				frontResource	= R.drawable.tits;
+			@Override
+			public void run() {
+				draw();
+			}
 
+		};
+		private Blooba blooba;
+		private boolean visible = true;
+		private boolean touchEnabled = true;
+		private boolean gravityEnabled = true;
+		private int quality = 40;
+		private int size = 400;
+		private int frontResource = R.drawable.ball;
+
+		/**
+		 * 
+		 */
 		private BloobaEngine() {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(BloobaService.this);
 
@@ -88,8 +107,8 @@ public class BloobaService extends WallpaperService {
 
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-			this.blooba = new Blooba(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), frontResource), size, size, false),
-					width, height, quality, 0.9f); // TODO relax
+			this.blooba = new Blooba(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), frontResource), size, size, false), width, height, quality, 0.9f); // TODO
+																																												// relax
 			super.onSurfaceChanged(holder, format, width, height);
 		}
 
@@ -114,6 +133,10 @@ public class BloobaService extends WallpaperService {
 			}
 		}
 
+		/**
+		 * Renders the background and invokes Blooba callback. Afterwards a new rendering frame will
+		 * be requested by the engine.
+		 */
 		private void draw() {
 			SurfaceHolder holder = getSurfaceHolder();
 			Canvas canvas = null;

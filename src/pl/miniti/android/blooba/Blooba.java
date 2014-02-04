@@ -1,3 +1,9 @@
+/**
+ * Blooba.java
+ * Author: marek.brodziak@gmail.com
+ * Created: Feb 4, 2014
+ * Copyright 2014 by miniti
+ */
 package pl.miniti.android.blooba;
 
 import android.graphics.Bitmap;
@@ -7,35 +13,93 @@ import android.graphics.Path;
 import android.hardware.SensorEvent;
 import android.view.MotionEvent;
 
+/**
+ * Blooba object can handle itself within a canvas, when initialized by the service. Controls
+ * calculations of gravity and squishiness according to user preferences.
+ * 
+ * Currently Blooba objects only support rectangular textures with circular contents.
+ */
 public class Blooba {
 
-	private static final float	EPS				= 0.0001f;
-	private static final double	tStep			= 1.0 / 10.0;
-	private static final int	perimIters		= 5;
+	private static final float EPS = 0.0001f;
+	private static final double tStep = 1.0 / 10.0;
+	private static final int perimIters = 5;
 
-	private static final float	mouseRad		= 10f;
-	private static final int	resolution		= 10;
+	private static final float mouseRad = 10f;
+	private static final int resolution = 10;
 
-	private double[]			x, y, xLast, yLast, ax, ay;
-	private double				blobAreaTarget, sideLength;
-	private int					width, height, rad;
-	private Bitmap				texture;
-	private float[]				mousePos;
-	private float				gravityForceY	= 9.8f;
-	private float				gravityForceX	= 0;
-	private float				relaxFactor		= 0.2f;
-	private int					nParts			= 30;
+	private double[] x, y, xLast, yLast, ax, ay;
+	private double blobAreaTarget, sideLength;
+	private int width, height, radius;
+	private Bitmap texture;
+	private float[] mousePos;
+	private float gravityForceY = 9.8f;
+	private float gravityForceX = 0;
+	private float relaxFactor = 0.2f;
+	private int nParts = 30;
 
+	/**
+	 * Public constructor for creating Blooba objects according to user preferences
+	 * 
+	 * @param texture
+	 *            bitmap texture selected by the user
+	 * @param width
+	 *            width of the rendering canvas
+	 * @param height
+	 *            height of the rendering canvas
+	 * @param quality
+	 *            quality of the blob shape being the number of triangles calculated in each
+	 *            iteration
+	 * @param relaxFactor
+	 *            controls squishiness of the blob
+	 */
 	public Blooba(Bitmap texture, int width, int height, int quality, float relaxFactor) {
+		// initialize the variable that we'll need later
 		this.width = width;
 		this.height = height;
 		this.texture = texture;
-		this.rad = texture.getWidth() / 2;
 		this.nParts = quality;
 		this.relaxFactor = relaxFactor;
-		setupParticles();
+
+		// radius is basically half of the texture width
+		radius = texture.getWidth() / 2;
+
+		// initialize all arrays
+		x = new double[nParts];
+		y = new double[nParts];
+		xLast = new double[nParts];
+		yLast = new double[nParts];
+		ax = new double[nParts];
+		ay = new double[nParts];
+
+		// intialize number of points around a circle (as many as required
+		// according to the blob quality)
+		double cx = width / (2 * resolution);
+		double cy = height / (2 * resolution);
+		for (int i = 0; i < nParts; ++i) {
+			double ang = i * 2 * Math.PI / nParts * 1.0;
+			x[i] = cx + Math.sin(ang) * radius / resolution;
+			y[i] = cy + Math.cos(ang) * radius / resolution;
+			xLast[i] = x[i];
+			yLast[i] = y[i];
+			ax[i] = 0;
+			ay[i] = 0;
+		}
+
+		// calculate length of the blob side
+		sideLength = Math.sqrt((x[1] - x[0]) * (x[1] - x[0]) + (y[1] - y[0]) * (y[1] - y[0]));
+
+		// get blob area
+		blobAreaTarget = getArea();
+		fixPerimeter();
 	}
 
+	/**
+	 * Callback method invoked by the {@see Engine} on every rendering frame
+	 * 
+	 * @param canvas
+	 *            locked Canvas object on which Blooba is rendered
+	 */
 	public void requestAnimationFrame(Canvas canvas) {
 		for (int i = 0; i < 10; ++i) {
 			integrateParticles(tStep);
@@ -46,32 +110,35 @@ public class Blooba {
 		draw(canvas);
 	}
 
-	private void setupParticles() {
-		x = new double[nParts];
-		y = new double[nParts];
-		xLast = new double[nParts];
-		yLast = new double[nParts];
-		ax = new double[nParts];
-		ay = new double[nParts];
-
-		double cx = width / (2 * resolution);
-		double cy = height / (2 * resolution);
-		for (int i = 0; i < nParts; ++i) {
-			double ang = i * 2 * Math.PI / nParts * 1.0;
-			x[i] = cx + Math.sin(ang) * rad / resolution;
-			y[i] = cy + Math.cos(ang) * rad / resolution;
-			xLast[i] = x[i];
-			yLast[i] = y[i];
-			ax[i] = 0;
-			ay[i] = 0;
+	/**
+	 * Callback method invoked by the {@see Engine} on every motion event if available
+	 * 
+	 * @param event
+	 *            {@MotionEvent} being user tap or slide
+	 */
+	public void registerMotionEvent(MotionEvent event) {
+		float[] pos = mapInv(event.getX(), event.getY());
+		if (!isPointInBlob(pos)) {
+			mousePos = pos;
 		}
-
-		sideLength = Math.sqrt((x[1] - x[0]) * (x[1] - x[0]) + (y[1] - y[0]) * (y[1] - y[0]));
-
-		blobAreaTarget = getArea();
-		fixPerimeter();
 	}
 
+	/**
+	 * Callback method invoked by the {@see Engine} on every gravity sensor event
+	 * 
+	 * @param event
+	 *            {@SensorEvent} with gravity information
+	 */
+	public void registerSensorEvent(SensorEvent event) {
+		gravityForceX = event.values[0];
+		gravityForceY = event.values[1];
+	}
+
+	/**
+	 * Calculates the are of the blob
+	 * 
+	 * @return area of the blob
+	 */
 	private double getArea() {
 		double area = 0.0;
 		area += x[nParts - 1] * y[0] - x[0] * y[nParts - 1];
@@ -82,6 +149,9 @@ public class Blooba {
 		return area;
 	}
 
+	/**
+	 *  
+	 */
 	private void fixPerimeter() {
 		double[] diffx = new double[nParts];
 		double[] diffy = new double[nParts];
@@ -115,6 +185,12 @@ public class Blooba {
 		}
 	}
 
+	/**
+	 * Applies gravity to the blob
+	 * 
+	 * @param dt
+	 *            speed of the animation, i.e. period of time for each frane
+	 */
 	private void integrateParticles(double dt) {
 		double dtSquared = dt * dt;
 		double gravityAddX = -gravityForceX * dtSquared;
@@ -131,6 +207,9 @@ public class Blooba {
 		}
 	}
 
+	/**
+	 * Handles blob collisions with the screen edges
+	 */
 	private void collideWithEdge() {
 		for (int i = 0; i < nParts; ++i) {
 			if (x[i] < 0) {
@@ -150,6 +229,9 @@ public class Blooba {
 		}
 	}
 
+	/**
+	 * Handles blob colllisions with the mouse/touch
+	 */
 	private void collideWithMouse() {
 		if (mousePos == null) {
 			return;
@@ -174,30 +256,27 @@ public class Blooba {
 		mousePos = null;
 	}
 
+	/**
+	 * Tests if a given point is located inside the blob
+	 * 
+	 * @param p
+	 *            two-dimentional array defining a point
+	 * @return true if this point is located inside the blob, false otherwise
+	 */
 	@SuppressWarnings("unused")
 	private boolean isPointInBlob(float[] p) {
 		boolean c = false;
 		int i = -1;
 		int l = nParts;
 		for (int j = l - 1; ++i < l; j = i) {
-			boolean temp = ((y[i] <= p[1] && p[1] < y[j]) || (y[j] <= p[1] && p[1] < y[i]))
-					&& (p[0] < (x[j] - x[i]) * (p[1] - y[i]) / (y[j] - y[i]) + x[i]) && (c = !c);
+			boolean temp = ((y[i] <= p[1] && p[1] < y[j]) || (y[j] <= p[1] && p[1] < y[i])) && (p[0] < (x[j] - x[i]) * (p[1] - y[i]) / (y[j] - y[i]) + x[i]) && (c = !c);
 		}
 		return c;
 	}
 
-	public void registerMotionEvent(MotionEvent event) {
-		float[] pos = mapInv(event.getX(), event.getY());
-		if (!isPointInBlob(pos)) {
-			mousePos = pos;
-		}
-	}
-
-	public void registerSensorEvent(SensorEvent event) {
-		gravityForceX = event.values[0];
-		gravityForceY = event.values[1];
-	}
-
+	/**
+	 * Makes sure all points are in order to keep the blob area constant
+	 */
 	private void constrainBlobEdges() {
 		fixPerimeter();
 		double perimeter = 0.0;
@@ -225,6 +304,9 @@ public class Blooba {
 		}
 	}
 
+	/**
+	 * @param canvas
+	 */
 	private void draw(Canvas canvas) {
 		double center_x = 0;
 		double center_y = 0;
@@ -247,22 +329,38 @@ public class Blooba {
 			double[] p3 = map(x[k], y[k]);
 			double a1 = 2 * Math.PI * (i * 1.0 / n);
 			double a2 = 2 * Math.PI * ((i * 1.0 + 1) / n);
-			double[] p4 = new double[] { rad + Math.sin(a1) * rad, rad + Math.cos(a1) * rad };
-			double[] p5 = new double[] { rad + Math.sin(a2) * rad, rad + Math.cos(a2) * rad };
+			double[] p4 = new double[]{radius + Math.sin(a1) * radius, radius + Math.cos(a1) * radius};
+			double[] p5 = new double[]{radius + Math.sin(a2) * radius, radius + Math.cos(a2) * radius};
 
-			textureMap(canvas, new double[][] { { p1[0], p1[1], rad, rad }, { p2[0], p2[1], p4[0], p4[1] }, { p3[0], p3[1], p5[0], p5[1] } });
+			textureMap(canvas, new double[][]{{p1[0], p1[1], radius, radius}, {p2[0], p2[1], p4[0], p4[1]}, {p3[0], p3[1], p5[0], p5[1]}});
 
 		}
 	}
 
+	/**
+	 * Map a given point to the full resolution of the screen
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private double[] map(double x, double y) {
-		return new double[] { x * resolution, y * resolution };
+		return new double[]{x * resolution, y * resolution};
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private float[] mapInv(float x, float y) {
-		return new float[] { x / resolution, y / resolution };
+		return new float[]{x / resolution, y / resolution};
 	}
 
+	/**
+	 * @param canvas
+	 * @param pts
+	 */
 	private void textureMap(Canvas canvas, double[][] pts) {
 		double x0 = pts[0][0], x1 = pts[1][0], x2 = pts[2][0];
 		double y0 = pts[0][1], y1 = pts[1][1], y2 = pts[2][1];
@@ -288,8 +386,8 @@ public class Blooba {
 
 		Matrix matrix = new Matrix();
 
-		matrix.setValues(new float[] { (float) (delta_a / delta), (float) (delta_b / delta), (float) (delta_c / delta), (float) (delta_d / delta),
-				(float) (delta_e / delta), (float) (delta_f / delta), 0f, 0f, 1f });
+		matrix.setValues(new float[]{(float) (delta_a / delta), (float) (delta_b / delta), (float) (delta_c / delta), (float) (delta_d / delta), (float) (delta_e / delta), (float) (delta_f / delta),
+				0f, 0f, 1f});
 
 		canvas.drawBitmap(texture, matrix, null);
 
