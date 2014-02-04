@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="blooba_settings"
+    android:title="@string/blooba_settings" >
+
+    <PreferenceCategory android:title="@string/general_settings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="touch"
+            android:title="@string/enabletouch_settings" >
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="gravity"
+            android:title="@string/enablegravity_settings" >
+        </CheckBoxPreference>
+
+        <ListPreference
+            android:defaultValue="40"
+            android:entries="@array/quality"
+            android:entryValues="@array/qualityValues"
+            android:key="quality"
+            android:summary="@string/quality_summary"
+            android:title="@string/quality_settings" />
+        <ListPreference
+            android:defaultValue="400"
+            android:entries="@array/size"
+            android:entryValues="@array/sizeValues"
+            android:key="size"
+            android:summary="@string/size_summary"
+            android:title="@string/size_settings" />
+        <ListPreference
+            android:defaultValue="0.9"
+            android:entries="@array/relax"
+            android:entryValues="@array/relaxValues"
+            android:key="relax"
+            android:summary="@string/relax_summary"
+            android:title="@string/relax_settings" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/foregound_settings" >
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/background_settings" >
+    </PreferenceCategory>
+
+</PreferenceScreen>

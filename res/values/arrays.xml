@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="quality">
+        <item>low</item>
+        <item>medium</item>
+        <item>high</item>
+    </array>
+    <array name="qualityValues">
+        <item>20</item>
+        <item>40</item>
+        <item>60</item>
+    </array>
+    <array name="size">
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+	</array>
+    <array name="sizeValues">
+        <item>200</item>
+        <item>400</item>
+        <item>600</item>
+    </array>
+    <array name="relax">
+        <item>very</item>
+        <item>so-so</item>
+        <item>just right</item>
+        <item>follows battery</item>
+    </array>
+    <array name="relaxValues">
+        <item>0.2</item>
+        <item>0.5</item>
+        <item>0.9</item>
+        <item>0</item>
+    </array>
+
+</resources>
