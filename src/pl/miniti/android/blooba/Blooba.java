@@ -37,7 +37,7 @@ public class Blooba {
 	private float[] mousePos;
 	private float gravityForceY = 9.8f;
 	private float gravityForceX = 0;
-	private float relaxFactor = 0.2f;
+	private float relaxFactor = .2f;
 	private int nParts = 30;
 	private boolean invertGravity = false;
 
@@ -51,24 +51,23 @@ public class Blooba {
 	 *            width of the rendering canvas
 	 * @param height
 	 *            height of the rendering canvas
-	 * @param quality
-	 *            quality of the blob shape being the number of triangles
-	 *            calculated in each iteration
-	 * @param relaxFactor
-	 *            controls squishiness of the blob
+	 * @param settings
+	 *            user settings of the Blooba
 	 */
-	public Blooba(Bitmap texture, int width, int height, int quality,
-			float relaxFactor, boolean invertGravity) {
+	public Blooba(Bitmap texture, int width, int height,
+			BloobaPreferencesWrapper settings) {
 		// initialize the variable that we'll need later
 		this.width = width;
 		this.height = height;
-		this.texture = texture;
-		this.nParts = quality;
-		this.invertGravity = invertGravity;
-		this.relaxFactor = relaxFactor;
+
+		this.nParts = settings.getQuality();
+		this.invertGravity = settings.isGravityInverted();
+		this.relaxFactor = settings.getRelaxFactor();
 
 		// radius is basically half of the texture width
-		radius = texture.getWidth() / 2;
+		int size = (int) (Math.min(width, height) * settings.getSize());
+		this.texture = Bitmap.createScaledBitmap(texture, size, size, false);
+		radius = size / 2;
 
 		// initialize all arrays
 		x = new double[nParts];

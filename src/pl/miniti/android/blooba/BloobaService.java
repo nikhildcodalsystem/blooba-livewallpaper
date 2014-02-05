@@ -8,7 +8,6 @@ package pl.miniti.android.blooba;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -53,35 +52,23 @@ public class BloobaService extends WallpaperService {
 
 		};
 		private Blooba blooba;
+		private BloobaPreferencesWrapper bloobaPreferences;
 		private boolean visible = true;
-		private boolean touchEnabled = true;
-		private boolean gravityEnabled = true;
-		private boolean gravityInverted = false;
-		private int quality = 40;
-		private float size = .8f;
-		private float relaxFactor = 0.9f;
 		private int frontResource = R.drawable.ball;
 
 		/**
 		 * 
 		 */
 		private BloobaEngine() {
-			SharedPreferences prefs = PreferenceManager
+			SharedPreferences preferences = PreferenceManager
 					.getDefaultSharedPreferences(BloobaService.this);
-
-			touchEnabled = prefs.getBoolean("touch", true);
-			gravityEnabled = prefs.getBoolean("gravity", true);
-			gravityInverted = prefs.getBoolean("invert", false);
-			quality = prefs.getInt("quality", 40);
-			size = prefs.getFloat("size", .8f);
-			relaxFactor = prefs.getFloat("relax", .9f);
-
+			bloobaPreferences = BloobaPreferencesWrapper.fromPreferences(preferences);
 			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-			if (gravityEnabled) {
+			if (bloobaPreferences.isGravityEnabled()) {
 				gravitySensor = sensorManager
 						.getDefaultSensor(Sensor.TYPE_GRAVITY);
 				if (gravitySensor == null) {
-					gravityEnabled = false;
+					bloobaPreferences.setGravityEnabled(false);
 				} else {
 					sensorManager.registerListener(this, gravitySensor,
 							SensorManager.SENSOR_DELAY_FASTEST);
@@ -89,13 +76,12 @@ public class BloobaService extends WallpaperService {
 			}
 			handler.post(drawRunner);
 		}
-
 		@Override
 		public void onVisibilityChanged(boolean visible) {
 			this.visible = visible;
 			if (visible) {
 				handler.post(drawRunner);
-				if (gravityEnabled) {
+				if (bloobaPreferences.isGravityEnabled()) {
 					if (gravitySensor != null) {
 						sensorManager.registerListener(this, gravitySensor,
 								SensorManager.SENSOR_DELAY_FASTEST);
@@ -118,18 +104,14 @@ public class BloobaService extends WallpaperService {
 		public void onSurfaceChanged(SurfaceHolder holder, int format,
 				int width, int height) {
 			// TODO battery level implementation
-			int blobSize = (int) (Math.min(width, height) * size);
-			this.blooba = new Blooba(
-					Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-							getResources(), frontResource), blobSize, blobSize,
-							false), width, height, quality, relaxFactor,
-					gravityInverted);
+			this.blooba = new Blooba(BitmapFactory.decodeResource(
+					getResources(), frontResource), width, height, bloobaPreferences);
 			super.onSurfaceChanged(holder, format, width, height);
 		}
 
 		@Override
 		public void onTouchEvent(MotionEvent event) {
-			if (touchEnabled) {
+			if (bloobaPreferences.isTouchEnabled()) {
 				blooba.registerMotionEvent(event);
 			} else {
 				super.onTouchEvent(event);
@@ -143,7 +125,7 @@ public class BloobaService extends WallpaperService {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			if (gravityEnabled) {
+			if (bloobaPreferences.isGravityEnabled()) {
 				blooba.registerSensorEvent(event);
 			}
 		}
