@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <array name="quality">
+    <string-array name="quality">
         <item>low</item>
         <item>medium</item>
         <item>high</item>
-    </array>
-    <array name="qualityValues">
+    </string-array>
+    <string-array name="qualityValues">
         <item>20</item>
         <item>40</item>
         <item>60</item>
-    </array>
-    <array name="size">
+    </string-array>
+    <string-array name="size">
         <item>small</item>
         <item>medium</item>
         <item>large</item>
-	</array>
-    <array name="sizeValues">
+	</string-array>
+    <string-array name="sizeValues">
         <item>0.2</item>
         <item>0.5</item>
         <item>0.8</item>
-    </array>
-    <array name="relax">
+    </string-array>
+    <string-array name="relax">
         <item>very</item>
         <item>so-so</item>
         <item>just right</item>
         <item>follows battery</item>
-    </array>
-    <array name="relaxValues">
+    </string-array>
+    <string-array name="relaxValues">
         <item>0.2</item>
         <item>0.5</item>
         <item>0.9</item>
         <item>0</item>
-    </array>
-    <array name="speed">
+    </string-array>
+    <string-array name="speed">
         <item>slow</item>
         <item>medium</item>
         <item>fast</item>
-    </array>
-    <array name="speedValues">
+    </string-array>
+    <string-array name="speedValues">
         <item>3</item>
         <item>6</item>
         <item>10</item>
-    </array>
+    </string-array>
 
 </resources>

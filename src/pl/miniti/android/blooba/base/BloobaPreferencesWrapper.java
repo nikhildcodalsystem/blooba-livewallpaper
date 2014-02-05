@@ -37,13 +37,13 @@ public class BloobaPreferencesWrapper {
 	public static BloobaPreferencesWrapper fromPreferences(
 			SharedPreferences prefs) {
 		BloobaPreferencesWrapper settings = new BloobaPreferencesWrapper();
-		settings.touchEnabled = prefs.getBoolean("touch", true);
-		settings.gravityEnabled = prefs.getBoolean("gravity", true);
-		settings.gravityInverted = prefs.getBoolean("invert", false);
-		settings.quality = prefs.getInt("quality", 40);
-		settings.size = prefs.getFloat("size", .8f);
-		settings.relaxFactor = prefs.getFloat("relax", .9f);
-		settings.speed = prefs.getInt("speed", 10);
+		settings.touchEnabled = prefs.getBoolean("touch", Boolean.TRUE);
+		settings.gravityEnabled = prefs.getBoolean("gravity", Boolean.TRUE);
+		settings.gravityInverted = prefs.getBoolean("invert", Boolean.FALSE);
+		settings.quality = Integer.valueOf(prefs.getString("quality", "40"));
+		settings.size = Float.valueOf(prefs.getString("size", "0.8"));
+		settings.relaxFactor = Float.valueOf(prefs.getString("relax", "0.9"));
+		settings.speed = Integer.valueOf(prefs.getString("speed", "10"));
 		return settings;
 	}
 
