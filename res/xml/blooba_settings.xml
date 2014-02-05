@@ -23,7 +23,7 @@
             android:summary="@string/quality_summary"
             android:title="@string/quality_settings" />
         <ListPreference
-            android:defaultValue="400"
+            android:defaultValue="0.8"
             android:entries="@array/size"
             android:entryValues="@array/sizeValues"
             android:key="size"

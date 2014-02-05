@@ -17,9 +17,9 @@
         <item>large</item>
 	</array>
     <array name="sizeValues">
-        <item>200</item>
-        <item>400</item>
-        <item>600</item>
+        <item>0.2</item>
+        <item>0.5</item>
+        <item>0.8</item>
     </array>
     <array name="relax">
         <item>very</item>
