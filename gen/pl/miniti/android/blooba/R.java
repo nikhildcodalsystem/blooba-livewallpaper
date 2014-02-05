@@ -34,6 +34,7 @@ public final class R {
         public static final int squish=0x7f02000a;
     }
     public static final class string {
+        public static final int app_description=0x7f050010;
         public static final int app_name=0x7f050000;
         public static final int background_settings=0x7f05000f;
         public static final int blooba_settings=0x7f050001;

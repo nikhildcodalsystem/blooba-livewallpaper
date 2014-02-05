@@ -4,25 +4,36 @@
  * Created: Feb 5, 2014
  * Copyright 2014 by miniti
  */
-package pl.miniti.android.blooba;
+package pl.miniti.android.blooba.base;
 
 import android.content.SharedPreferences;
 
 /**
+ * Class wrapping user prefernces for the Blooba
  */
 public class BloobaPreferencesWrapper {
 
-	private boolean touchEnabled = true;
-	private boolean gravityEnabled = true;
-	private boolean gravityInverted = false;
-	private int quality = 40;
-	private int speed = 10;
-	private float size = .8f;
-	private float relaxFactor = .9f;
+	private boolean touchEnabled;
+	private boolean gravityEnabled;
+	private boolean gravityInverted;
+	private int quality;
+	private int speed;
+	private float size;
+	private float relaxFactor;
 
+	/**
+	 * Private constructor - use factory method
+	 */
 	private BloobaPreferencesWrapper() {
 	}
 
+	/**
+	 * Creates new object based on user preferences
+	 * 
+	 * @param prefs
+	 *            shared prefences
+	 * @return initialized object with all preferences in place
+	 */
 	public static BloobaPreferencesWrapper fromPreferences(
 			SharedPreferences prefs) {
 		BloobaPreferencesWrapper settings = new BloobaPreferencesWrapper();

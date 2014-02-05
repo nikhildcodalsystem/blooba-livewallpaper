@@ -4,7 +4,7 @@
  * Created: Feb 4, 2014
  * Copyright 2014 by miniti
  */
-package pl.miniti.android.blooba;
+package pl.miniti.android.blooba.base;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -30,8 +30,11 @@ public class Blooba {
 	private static final int resolution = 10;
 
 	private double[] x, y, xLast, yLast, ax, ay;
-	private double blobAreaTarget, sideLength;
-	private int width, height, radius;
+	private double blobAreaTarget;
+	private double sideLength;
+	private int width;
+	private int height;
+	private int radius;
 	private Bitmap texture;
 	private float[] mousePos;
 	private float gravityForceY = 9.8f;

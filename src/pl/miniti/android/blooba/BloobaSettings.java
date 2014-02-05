@@ -16,6 +16,9 @@ public class BloobaSettings extends PreferenceActivity {
 
 	/**
 	 * Merely loads the resource with preference screen configuration
+	 * 
+	 * @param savedInstanceState
+	 *            context
 	 */
 	@Override
 	@SuppressWarnings("all")

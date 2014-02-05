@@ -6,6 +6,8 @@
  */
 package pl.miniti.android.blooba;
 
+import pl.miniti.android.blooba.base.Blooba;
+import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
@@ -54,7 +56,7 @@ public class BloobaService extends WallpaperService {
 		private Blooba blooba;
 		private BloobaPreferencesWrapper bloobaPreferences;
 		private boolean visible = true;
-		private int frontResource = R.drawable.ball;
+		private int frontResource = R.drawable.earth;
 
 		/**
 		 * 
@@ -62,7 +64,8 @@ public class BloobaService extends WallpaperService {
 		private BloobaEngine() {
 			SharedPreferences preferences = PreferenceManager
 					.getDefaultSharedPreferences(BloobaService.this);
-			bloobaPreferences = BloobaPreferencesWrapper.fromPreferences(preferences);
+			bloobaPreferences = BloobaPreferencesWrapper
+					.fromPreferences(preferences);
 			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 			if (bloobaPreferences.isGravityEnabled()) {
 				gravitySensor = sensorManager
@@ -76,6 +79,7 @@ public class BloobaService extends WallpaperService {
 			}
 			handler.post(drawRunner);
 		}
+
 		@Override
 		public void onVisibilityChanged(boolean visible) {
 			this.visible = visible;
@@ -103,9 +107,9 @@ public class BloobaService extends WallpaperService {
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format,
 				int width, int height) {
-			// TODO battery level implementation
 			this.blooba = new Blooba(BitmapFactory.decodeResource(
-					getResources(), frontResource), width, height, bloobaPreferences);
+					getResources(), frontResource), width, height,
+					bloobaPreferences);
 			super.onSurfaceChanged(holder, format, width, height);
 		}
 

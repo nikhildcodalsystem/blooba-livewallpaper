@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">Blooba Live Wallpaper</string>
+    <string name="app_description">Highly customizable blob for your Android!</string>
     <string name="blooba_settings">Blooba Settings</string>
     <string name="general_settings">General</string>
     <string name="enabletouch_settings">Enable Touch</string>
