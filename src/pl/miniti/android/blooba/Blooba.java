@@ -39,6 +39,7 @@ public class Blooba {
 	private float gravityForceX = 0;
 	private float relaxFactor = 0.2f;
 	private int nParts = 30;
+	private boolean invertGravity = false;
 
 	/**
 	 * Public constructor for creating Blooba objects according to user
@@ -57,12 +58,13 @@ public class Blooba {
 	 *            controls squishiness of the blob
 	 */
 	public Blooba(Bitmap texture, int width, int height, int quality,
-			float relaxFactor) {
+			float relaxFactor, boolean invertGravity) {
 		// initialize the variable that we'll need later
 		this.width = width;
 		this.height = height;
 		this.texture = texture;
 		this.nParts = quality;
+		this.invertGravity = invertGravity;
 		this.relaxFactor = relaxFactor;
 
 		// radius is basically half of the texture width
@@ -201,7 +203,8 @@ public class Blooba {
 	private void integrateParticles(double dt) {
 		double dtSquared = dt * dt;
 		double gravityAddX = -gravityForceX * dtSquared;
-		double gravityAddY = gravityForceY * dtSquared;
+		double gravityAddY = (invertGravity ? -gravityForceY : gravityForceY)
+				* dtSquared;
 		for (int i = 0; i < nParts; ++i) {
 			double bufferX = x[i];
 			double bufferY = y[i];

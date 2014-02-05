@@ -56,8 +56,10 @@ public class BloobaService extends WallpaperService {
 		private boolean visible = true;
 		private boolean touchEnabled = true;
 		private boolean gravityEnabled = true;
+		private boolean gravityInverted = false;
 		private int quality = 40;
 		private float size = .8f;
+		private float relaxFactor = 0.9f;
 		private int frontResource = R.drawable.ball;
 
 		/**
@@ -69,8 +71,10 @@ public class BloobaService extends WallpaperService {
 
 			touchEnabled = prefs.getBoolean("touch", true);
 			gravityEnabled = prefs.getBoolean("gravity", true);
+			gravityInverted = prefs.getBoolean("invert", false);
 			quality = prefs.getInt("quality", 40);
 			size = prefs.getFloat("size", .8f);
+			relaxFactor = prefs.getFloat("relax", .9f);
 
 			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 			if (gravityEnabled) {
@@ -118,7 +122,8 @@ public class BloobaService extends WallpaperService {
 			this.blooba = new Blooba(
 					Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
 							getResources(), frontResource), blobSize, blobSize,
-							false), width, height, quality, 0.9f); // TODO
+							false), width, height, quality, relaxFactor,
+					gravityInverted);
 			super.onSurfaceChanged(holder, format, width, height);
 		}
 
