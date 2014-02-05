@@ -10,6 +10,8 @@
     <string name="quality_summary">Quality of blooba</string>
     <string name="size_settings">Size</string>
     <string name="size_summary">Size of blooba</string>
+    <string name="speed_settings">Speed</string>
+    <string name="speed_summary">Animation speed</string>
     <string name="relax_settings">Relax factor</string>
     <string name="relax_summary">Squishiness of the blooba</string>
     <string name="foregound_settings">Foreground</string>

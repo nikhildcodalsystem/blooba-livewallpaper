@@ -33,5 +33,15 @@
         <item>0.9</item>
         <item>0</item>
     </array>
+    <array name="speed">
+        <item>slow</item>
+        <item>medium</item>
+        <item>fast</item>
+    </array>
+    <array name="speedValues">
+        <item>3</item>
+        <item>6</item>
+        <item>10</item>
+    </array>
 
 </resources>

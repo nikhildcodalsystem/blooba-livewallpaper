@@ -26,7 +26,6 @@ public class Blooba {
 	private static final float EPS = 0.0001f;
 	private static final double tStep = 1.0 / 10.0;
 	private static final int perimIters = 5;
-
 	private static final float mouseRad = 10f;
 	private static final int resolution = 10;
 
@@ -37,9 +36,10 @@ public class Blooba {
 	private float[] mousePos;
 	private float gravityForceY = 9.8f;
 	private float gravityForceX = 0;
-	private float relaxFactor = .2f;
-	private int nParts = 30;
-	private boolean invertGravity = false;
+	private float relaxFactor;
+	private int nParts;
+	private boolean invertGravity;
+	private int speed;
 
 	/**
 	 * Public constructor for creating Blooba objects according to user
@@ -63,6 +63,7 @@ public class Blooba {
 		this.nParts = settings.getQuality();
 		this.invertGravity = settings.isGravityInverted();
 		this.relaxFactor = settings.getRelaxFactor();
+		this.speed = settings.getSpeed();
 
 		// radius is basically half of the texture width
 		int size = (int) (Math.min(width, height) * settings.getSize());
@@ -107,7 +108,7 @@ public class Blooba {
 	 *            locked Canvas object on which Blooba is rendered
 	 */
 	public void requestAnimationFrame(Canvas canvas) {
-		for (int i = 0; i < 10; ++i) {
+		for (int i = 0; i < speed; ++i) {
 			integrateParticles(tStep);
 			constrainBlobEdges();
 			collideWithEdge();

@@ -35,6 +35,13 @@
             android:summary="@string/size_summary"
             android:title="@string/size_settings" />
         <ListPreference
+            android:defaultValue="10"
+            android:entries="@array/speed"
+            android:entryValues="@array/speedValues"
+            android:key="speed"
+            android:summary="@string/speed_summary"
+            android:title="@string/speed_settings" />
+        <ListPreference
             android:defaultValue="0.9"
             android:entries="@array/relax"
             android:entryValues="@array/relaxValues"

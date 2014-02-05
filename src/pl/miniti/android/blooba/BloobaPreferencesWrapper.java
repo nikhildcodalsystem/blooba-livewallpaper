@@ -16,6 +16,7 @@ public class BloobaPreferencesWrapper {
 	private boolean gravityEnabled = true;
 	private boolean gravityInverted = false;
 	private int quality = 40;
+	private int speed = 10;
 	private float size = .8f;
 	private float relaxFactor = .9f;
 
@@ -31,6 +32,7 @@ public class BloobaPreferencesWrapper {
 		settings.quality = prefs.getInt("quality", 40);
 		settings.size = prefs.getFloat("size", .8f);
 		settings.relaxFactor = prefs.getFloat("relax", .9f);
+		settings.speed = prefs.getInt("speed", 10);
 		return settings;
 	}
 
@@ -80,6 +82,14 @@ public class BloobaPreferencesWrapper {
 
 	public void setRelaxFactor(float relaxFactor) {
 		this.relaxFactor = relaxFactor;
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
 
 }
