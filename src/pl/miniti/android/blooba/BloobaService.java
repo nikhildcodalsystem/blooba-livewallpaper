@@ -8,6 +8,8 @@ package pl.miniti.android.blooba;
 
 import pl.miniti.android.blooba.base.Blooba;
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
+import pl.miniti.android.blooba.base.ForegroundProvider;
+import pl.miniti.android.blooba.base.ImageForegroundProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -109,9 +111,6 @@ public class BloobaService extends WallpaperService {
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format,
 				int width, int height) {
-			this.blooba = new Blooba(BitmapFactory.decodeResource(
-					getResources(), frontResource), width, height,
-					bloobaPreferences);
 
 			int resource = R.drawable.bg_stars;
 			if (width > height) {
@@ -125,6 +124,12 @@ public class BloobaService extends WallpaperService {
 						BitmapFactory.decodeResource(getResources(), resource),
 						width, height, false);
 			}
+
+			ForegroundProvider fProvider = new ImageForegroundProvider(
+					BitmapFactory.decodeResource(getResources(), frontResource));
+
+			this.blooba = new Blooba(fProvider, width, height,
+					bloobaPreferences);
 
 			super.onSurfaceChanged(holder, format, width, height);
 		}

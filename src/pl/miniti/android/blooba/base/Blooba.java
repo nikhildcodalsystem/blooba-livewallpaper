@@ -35,7 +35,6 @@ public class Blooba {
 	private int width;
 	private int height;
 	private int radius;
-	private Bitmap texture;
 	private float[] mousePos;
 	private float gravityForceY = 9.8f;
 	private float gravityForceX = 0;
@@ -43,6 +42,7 @@ public class Blooba {
 	private int nParts;
 	private boolean invertGravity;
 	private int speed;
+	private ForegroundProvider fProvider;
 
 	/**
 	 * Public constructor for creating Blooba objects according to user
@@ -57,7 +57,7 @@ public class Blooba {
 	 * @param settings
 	 *            user settings of the Blooba
 	 */
-	public Blooba(Bitmap texture, int width, int height,
+	public Blooba(ForegroundProvider fProvider, int width, int height,
 			BloobaPreferencesWrapper settings) {
 		// initialize the variable that we'll need later
 		this.width = width;
@@ -70,7 +70,9 @@ public class Blooba {
 
 		// radius is basically half of the texture width
 		int size = (int) (Math.min(width, height) * settings.getSize());
-		this.texture = Bitmap.createScaledBitmap(texture, size, size, false);
+		this.fProvider = fProvider;
+		this.fProvider.initForSize(size);
+
 		radius = size / 2;
 
 		// initialize all arrays
@@ -333,6 +335,9 @@ public class Blooba {
 		center_y /= nParts * 1.0;
 		double[] p1 = map(center_x, center_y);
 
+		Bitmap texture = fProvider.getTexture((float) (center_x * resolution),
+				(float) (center_y * resolution), radius * 2);
+
 		int n = nParts / 2;
 		for (int i = 0; i < n; ++i) {
 			int j = i * nParts / n;
@@ -349,7 +354,8 @@ public class Blooba {
 			double[] p5 = new double[]{radius + Math.sin(a2) * radius,
 					radius + Math.cos(a2) * radius};
 
-			textureMap(canvas, new double[][]{{p1[0], p1[1], radius, radius},
+			textureMap(texture, canvas, new double[][]{
+					{p1[0], p1[1], radius, radius},
 					{p2[0], p2[1], p4[0], p4[1]}, {p3[0], p3[1], p5[0], p5[1]}});
 
 		}
@@ -376,10 +382,11 @@ public class Blooba {
 	}
 
 	/**
+	 * @param texture
 	 * @param canvas
 	 * @param pts
 	 */
-	private void textureMap(Canvas canvas, double[][] pts) {
+	private void textureMap(Bitmap texture, Canvas canvas, double[][] pts) {
 		double x0 = pts[0][0], x1 = pts[1][0], x2 = pts[2][0];
 		double y0 = pts[0][1], y1 = pts[1][1], y2 = pts[2][1];
 		double u0 = pts[0][2], u1 = pts[1][2], u2 = pts[2][2];
