@@ -12,6 +12,7 @@ import pl.miniti.android.blooba.base.foreground.ForegroundProvider;
 import pl.miniti.android.blooba.base.foreground.ImageForegroundProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -46,7 +47,10 @@ public class BloobaService extends WallpaperService {
 
 	/**
 	 */
-	private class BloobaEngine extends Engine implements SensorEventListener {
+	private class BloobaEngine extends Engine
+			implements
+				SensorEventListener,
+				OnSharedPreferenceChangeListener {
 		private final Handler handler = new Handler();
 		private final Runnable drawRunner = new Runnable() {
 
@@ -68,6 +72,8 @@ public class BloobaService extends WallpaperService {
 		private BloobaEngine() {
 			SharedPreferences preferences = PreferenceManager
 					.getDefaultSharedPreferences(BloobaService.this);
+			preferences.registerOnSharedPreferenceChangeListener(this);
+
 			bloobaPreferences = BloobaPreferencesWrapper
 					.fromPreferences(preferences);
 			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -82,6 +88,12 @@ public class BloobaService extends WallpaperService {
 				}
 			}
 			handler.post(drawRunner);
+		}
+
+		@Override
+		public void onSharedPreferenceChanged(
+				SharedPreferences sharedPreferences, String key) {
+			// TODO
 		}
 
 		@Override
@@ -133,6 +145,7 @@ public class BloobaService extends WallpaperService {
 
 			super.onSurfaceChanged(holder, format, width, height);
 		}
+
 		@Override
 		public void onTouchEvent(MotionEvent event) {
 			if (bloobaPreferences.isTouchEnabled()) {
@@ -176,6 +189,7 @@ public class BloobaService extends WallpaperService {
 				handler.postDelayed(drawRunner, 41);
 			}
 		}
+
 	}
 
 }
