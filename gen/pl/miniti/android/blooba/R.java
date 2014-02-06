@@ -22,16 +22,17 @@ public final class R {
     }
     public static final class drawable {
         public static final int ball=0x7f020000;
-        public static final int bieber=0x7f020001;
-        public static final int child=0x7f020002;
-        public static final int clock=0x7f020003;
-        public static final int earth=0x7f020004;
-        public static final int eu=0x7f020005;
-        public static final int eyeball=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int ironman=0x7f020008;
-        public static final int kenny=0x7f020009;
-        public static final int squish=0x7f02000a;
+        public static final int bg_stars=0x7f020001;
+        public static final int bieber=0x7f020002;
+        public static final int child=0x7f020003;
+        public static final int clock=0x7f020004;
+        public static final int earth=0x7f020005;
+        public static final int eu=0x7f020006;
+        public static final int eyeball=0x7f020007;
+        public static final int ic_launcher=0x7f020008;
+        public static final int ironman=0x7f020009;
+        public static final int kenny=0x7f02000a;
+        public static final int squish=0x7f02000b;
     }
     public static final class string {
         public static final int app_description=0x7f050001;

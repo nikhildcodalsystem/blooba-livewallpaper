@@ -41,7 +41,7 @@ public class BloobaPreferencesWrapper {
 		settings.gravityEnabled = prefs.getBoolean("gravity", Boolean.TRUE);
 		settings.gravityInverted = prefs.getBoolean("invert", Boolean.FALSE);
 		settings.quality = Integer.valueOf(prefs.getString("quality", "40"));
-		settings.size = Float.valueOf(prefs.getString("size", "0.8"));
+		settings.size = Float.valueOf(prefs.getString("size", "0.5"));
 		settings.relaxFactor = Float.valueOf(prefs.getString("relax", "0.9"));
 		settings.speed = Integer.valueOf(prefs.getString("speed", "10"));
 		return settings;

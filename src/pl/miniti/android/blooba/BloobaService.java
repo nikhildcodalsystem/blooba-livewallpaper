@@ -10,9 +10,10 @@ import pl.miniti.android.blooba.base.Blooba;
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -57,6 +58,7 @@ public class BloobaService extends WallpaperService {
 		private BloobaPreferencesWrapper bloobaPreferences;
 		private boolean visible = true;
 		private int frontResource = R.drawable.earth;
+		private Bitmap background;
 
 		/**
 		 * 
@@ -69,7 +71,7 @@ public class BloobaService extends WallpaperService {
 			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 			if (bloobaPreferences.isGravityEnabled()) {
 				gravitySensor = sensorManager
-						.getDefaultSensor(Sensor.TYPE_GRAVITY);
+						.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 				if (gravitySensor == null) {
 					bloobaPreferences.setGravityEnabled(false);
 				} else {
@@ -110,9 +112,22 @@ public class BloobaService extends WallpaperService {
 			this.blooba = new Blooba(BitmapFactory.decodeResource(
 					getResources(), frontResource), width, height,
 					bloobaPreferences);
+
+			int resource = R.drawable.bg_stars;
+			if (width > height) {
+				Matrix matrix = new Matrix();
+				matrix.setRotate(90f);
+				this.background = Bitmap.createBitmap(
+						BitmapFactory.decodeResource(getResources(), resource),
+						0, 0, width, height, matrix, false);
+			} else {
+				this.background = Bitmap.createScaledBitmap(
+						BitmapFactory.decodeResource(getResources(), resource),
+						width, height, false);
+			}
+
 			super.onSurfaceChanged(holder, format, width, height);
 		}
-
 		@Override
 		public void onTouchEvent(MotionEvent event) {
 			if (bloobaPreferences.isTouchEnabled()) {
@@ -144,7 +159,7 @@ public class BloobaService extends WallpaperService {
 			try {
 				canvas = holder.lockCanvas();
 				if (canvas != null && blooba != null) {
-					canvas.drawColor(Color.BLACK);
+					canvas.drawBitmap(this.background, 0f, 0f, null);
 					blooba.requestAnimationFrame(canvas);
 				}
 			} finally {
@@ -156,7 +171,6 @@ public class BloobaService extends WallpaperService {
 				handler.postDelayed(drawRunner, 41);
 			}
 		}
-
 	}
 
 }

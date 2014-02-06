@@ -36,7 +36,7 @@
             android:exported="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/blooba_settings"
-            android:theme="@android:style/Theme.Light.WallpaperSettings" >
+            android:theme="@android:style/Theme.WallpaperSettings" >
         </activity>
     </application>
 
