@@ -6,6 +6,7 @@
  */
 package pl.miniti.android.blooba.base;
 
+import pl.miniti.android.blooba.base.foreground.ForegroundProvider;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;

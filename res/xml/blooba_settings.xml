@@ -49,7 +49,12 @@
             android:summary="@string/relax_summary"
             android:title="@string/relax_settings" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/foregound_settings" >
+    <PreferenceCategory android:title="@string/select_foreground" >
+        <Preference
+            android:summary="@string/select_foreground_summary"
+            android:title="@string/select_foreground" >
+            <intent android:action=".BloobaForeground" />
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/background_settings" >
     </PreferenceCategory>

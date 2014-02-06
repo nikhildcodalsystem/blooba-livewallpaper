@@ -8,8 +8,8 @@ package pl.miniti.android.blooba;
 
 import pl.miniti.android.blooba.base.Blooba;
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
-import pl.miniti.android.blooba.base.ForegroundProvider;
-import pl.miniti.android.blooba.base.ImageForegroundProvider;
+import pl.miniti.android.blooba.base.foreground.ForegroundProvider;
+import pl.miniti.android.blooba.base.foreground.ImageForegroundProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;

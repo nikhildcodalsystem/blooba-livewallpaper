@@ -4,7 +4,7 @@
  * Created: Feb 6, 2014
  * Copyright 2014 by miniti
  */
-package pl.miniti.android.blooba.base;
+package pl.miniti.android.blooba.base.foreground;
 
 import android.graphics.Bitmap;
 

@@ -36,7 +36,16 @@
             android:exported="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/blooba_settings"
-            android:theme="@android:style/Theme.WallpaperSettings" >
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".BloobaForeground"
+            android:label="@string/select_foreground"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name=".BloobaForeground" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 
