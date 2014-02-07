@@ -56,7 +56,12 @@
             <intent android:action=".BloobaForeground" />
         </Preference>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/background_settings" >
+    <PreferenceCategory android:title="@string/select_background" >
+        <Preference
+            android:summary="@string/select_background_summary"
+            android:title="@string/select_background" >
+            <intent android:action=".BloobaBackground" />
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>

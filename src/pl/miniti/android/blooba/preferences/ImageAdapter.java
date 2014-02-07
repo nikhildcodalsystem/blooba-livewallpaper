@@ -67,6 +67,8 @@ public class ImageAdapter extends BaseAdapter {
 		layout.addView(imageView, lpi);
 		layout.addView(textView, lpt);
 
+		layout.setOnClickListener(thumbs[position].getListener());
+
 		return layout;
 	}
 }

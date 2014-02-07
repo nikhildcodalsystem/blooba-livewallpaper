@@ -7,6 +7,8 @@
 
 package pl.miniti.android.blooba.preferences;
 
+import android.view.View;
+
 /**
  */
 public class Miniature {
@@ -15,14 +17,18 @@ public class Miniature {
 
 	private String description;
 
+	private View.OnClickListener listener;
+
 	/**
 	 * @param resource
 	 * @param description
 	 */
-	public Miniature(int resource, String description) {
+	public Miniature(int resource, String description,
+			View.OnClickListener listener) {
 		super();
 		this.resource = resource;
 		this.description = description;
+		this.listener = listener;
 	}
 
 	public int getResource() {
@@ -31,6 +37,10 @@ public class Miniature {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public View.OnClickListener getListener() {
+		return listener;
 	}
 
 }

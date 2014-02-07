@@ -15,8 +15,9 @@
     <string name="speed_summary">Animation speed</string>
     <string name="relax_settings">Relax factor</string>
     <string name="relax_summary">Squishiness of the blooba</string>
-    <string name="background_settings">Background</string>
     <string name="select_foreground">Select Foreground</string>
     <string name="select_foreground_summary">Blooba Foreground Bitmap</string>
+    <string name="select_background">Select Background</string>
+    <string name="select_background_summary">Blooba Foreground Bitmap</string>
 
 </resources>
