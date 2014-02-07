@@ -366,6 +366,30 @@ public class Blooba {
 		}
 	}
 
+	public void setRelaxFactor(float relaxFactor) {
+		this.relaxFactor = relaxFactor;
+	}
+
+	public void setInvertGravity(boolean invertGravity) {
+		this.invertGravity = invertGravity;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
+	public ForegroundProvider getfProvider() {
+		return fProvider;
+	}
+
+	public void setfProvider(ForegroundProvider fProvider) {
+		if (this.fProvider != null) {
+			this.fProvider.destroy();
+		}
+		this.fProvider = fProvider;
+		this.fProvider.initForSize(radius * 2);
+	}
+
 	/**
 	 * Map a given point to the full resolution of the screen
 	 * 

@@ -5,7 +5,6 @@
     <string name="blooba_settings">Blooba Settings</string>
     <string name="general_settings">General</string>
     <string name="enabletouch_settings">Enable Touch</string>
-    <string name="enablegravity_settings">Enable Gravity</string>
     <string name="invertgravity_settings">Invert Gravity</string>
     <string name="quality_settings">Quality</string>
     <string name="quality_summary">Quality of blooba</string>

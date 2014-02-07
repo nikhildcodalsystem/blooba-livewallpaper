@@ -8,6 +8,7 @@ package pl.miniti.android.blooba;
 
 import pl.miniti.android.blooba.base.Blooba;
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
+import pl.miniti.android.blooba.base.Preferences;
 import pl.miniti.android.blooba.base.foreground.ForegroundProvider;
 import pl.miniti.android.blooba.base.foreground.ImageForegroundProvider;
 import pl.miniti.android.blooba.base.foreground.ReflectionForegroundProvider;
@@ -82,8 +83,28 @@ public class BloobaService extends WallpaperService {
 		@Override
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
-			// TODO some abstraction not to use a new blooba :/
-			newBlooba();
+			bloobaPreferences = BloobaPreferencesWrapper
+					.fromPreferences(sharedPreferences);
+			if (key.equals(Preferences.ENABLE_TOUCH)) {
+				// do nothing -- handled in the onTouchEvent() method
+			} else if (key.equals(Preferences.INVERT_GRAVITY)) {
+				blooba.setInvertGravity(bloobaPreferences.isGravityInverted());
+			} else if (key.equals(Preferences.RELAX_FACTOR)) {
+				blooba.setRelaxFactor(bloobaPreferences.getRelaxFactor());
+			} else if (key.equals(Preferences.SPEED)) {
+				blooba.setSpeed(bloobaPreferences.getSpeed());
+			} else if (key.equals(Preferences.FOREGROUND_NAME)) {
+				blooba.setfProvider(getProvider());
+			} else if (key.equals(Preferences.BACKGROUND_NAME)) {
+				loadBackground();
+				if (blooba.getfProvider().isDynamic()) {
+					((ReflectionForegroundProvider) blooba.getfProvider())
+							.setBackground(background);
+				}
+			} else {
+				// size && quality
+				newBlooba();
+			}
 		}
 
 		@Override
@@ -91,11 +112,9 @@ public class BloobaService extends WallpaperService {
 			this.visible = visible;
 			if (visible) {
 				handler.post(drawRunner);
-				if (bloobaPreferences.isGravityEnabled()) {
-					if (gravitySensor != null) {
-						sensorManager.registerListener(this, gravitySensor,
-								SensorManager.SENSOR_DELAY_FASTEST);
-					}
+				if (gravitySensor != null) {
+					sensorManager.registerListener(this, gravitySensor,
+							SensorManager.SENSOR_DELAY_FASTEST);
 				}
 			} else {
 				handler.removeCallbacks(drawRunner);
@@ -135,7 +154,7 @@ public class BloobaService extends WallpaperService {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			if (blooba != null && bloobaPreferences.isGravityEnabled()) {
+			if (blooba != null) {
 				blooba.registerSensorEvent(event);
 			}
 		}
@@ -176,17 +195,39 @@ public class BloobaService extends WallpaperService {
 			bloobaPreferences = BloobaPreferencesWrapper
 					.fromPreferences(preferences);
 			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-			if (bloobaPreferences.isGravityEnabled()) {
-				gravitySensor = sensorManager
-						.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-				if (gravitySensor == null) {
-					bloobaPreferences.setGravityEnabled(false);
-				} else {
-					sensorManager.registerListener(this, gravitySensor,
-							SensorManager.SENSOR_DELAY_FASTEST);
-				}
+			gravitySensor = sensorManager
+					.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+			if (gravitySensor != null) {
+				sensorManager.registerListener(this, gravitySensor,
+						SensorManager.SENSOR_DELAY_FASTEST);
 			}
 
+			loadBackground();
+
+			blooba = new Blooba(getProvider(), width, height, bloobaPreferences);
+
+		}
+
+		private int resolveResource(String name) {
+			if (name.equals("moon")) {
+				return R.drawable.moon;
+			} else if (name.equals("kenny")) {
+				return R.drawable.kenny;
+			} else if (name.equals("squish")) {
+				return R.drawable.squish;
+			} else if (name.equals("stars")) {
+				return R.drawable.bg_stars;
+			} else if (name.equals("bubble")) {
+				return R.drawable.bubble;
+			} else {
+				return R.drawable.earth;
+			}
+		}
+
+		private void loadBackground() {
+			if (background != null) {
+				background.recycle();
+			}
 			int resource = resolveResource(bloobaPreferences.getBackground());
 			if (width > height) {
 				Matrix matrix = new Matrix();
@@ -199,7 +240,9 @@ public class BloobaService extends WallpaperService {
 						BitmapFactory.decodeResource(getResources(), resource),
 						width, height, false);
 			}
+		}
 
+		private ForegroundProvider getProvider() {
 			ForegroundProvider fProvider = null;
 			Miniature.Type fType = Miniature.Type.values()[bloobaPreferences
 					.getForegroundType()];
@@ -217,24 +260,7 @@ public class BloobaService extends WallpaperService {
 									resolveResource(bloobaPreferences
 											.getForeground())));
 			}
-
-			blooba = new Blooba(fProvider, width, height, bloobaPreferences);
-
-		}
-		private int resolveResource(String name) {
-			if (name.equals("moon")) {
-				return R.drawable.moon;
-			} else if (name.equals("kenny")) {
-				return R.drawable.kenny;
-			} else if (name.equals("squish")) {
-				return R.drawable.squish;
-			} else if (name.equals("stars")) {
-				return R.drawable.bg_stars;
-			} else if (name.equals("bubble")) {
-				return R.drawable.bubble;
-			} else {
-				return R.drawable.earth;
-			}
+			return fProvider;
 		}
 
 	}

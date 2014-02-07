@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 public class BloobaPreferencesWrapper {
 
 	private boolean touchEnabled;
-	private boolean gravityEnabled;
 	private boolean gravityInverted;
 	private int quality;
 	private int speed;
@@ -42,17 +41,22 @@ public class BloobaPreferencesWrapper {
 	public static BloobaPreferencesWrapper fromPreferences(
 			SharedPreferences prefs) {
 		BloobaPreferencesWrapper settings = new BloobaPreferencesWrapper();
-		settings.touchEnabled = prefs.getBoolean("touch", Boolean.TRUE);
-		settings.gravityEnabled = prefs.getBoolean("gravity", Boolean.TRUE);
-		settings.gravityInverted = prefs.getBoolean("invert", Boolean.FALSE);
+		settings.touchEnabled = prefs.getBoolean(Preferences.ENABLE_TOUCH,
+				Boolean.TRUE);
+		settings.gravityInverted = prefs.getBoolean(Preferences.INVERT_GRAVITY,
+				Boolean.FALSE);
 		settings.quality = Integer.valueOf(prefs.getString("quality", "40"));
 		settings.size = Float.valueOf(prefs.getString("size", "0.5"));
-		settings.relaxFactor = Float.valueOf(prefs.getString("relax", "0.9"));
-		settings.speed = Integer.valueOf(prefs.getString("speed", "10"));
-		settings.foreground = prefs.getString("foreground_name", "earth");
+		settings.relaxFactor = Float.valueOf(prefs.getString(
+				Preferences.RELAX_FACTOR, "0.9"));
+		settings.speed = Integer.valueOf(prefs.getString(Preferences.SPEED,
+				"10"));
+		settings.foreground = prefs.getString(Preferences.FOREGROUND_NAME,
+				"earth");
 		settings.foregroundType = prefs.getInt("foreground_type",
 				Miniature.Type.IMAGE.ordinal());
-		settings.background = prefs.getString("background_name", "stars");
+		settings.background = prefs.getString(Preferences.BACKGROUND_NAME,
+				"stars");
 		settings.backgroundType = prefs.getInt("background_type",
 				Miniature.Type.IMAGE.ordinal());
 		return settings;
@@ -60,10 +64,6 @@ public class BloobaPreferencesWrapper {
 
 	public boolean isTouchEnabled() {
 		return touchEnabled;
-	}
-
-	public boolean isGravityEnabled() {
-		return gravityEnabled;
 	}
 
 	public boolean isGravityInverted() {
@@ -84,10 +84,6 @@ public class BloobaPreferencesWrapper {
 
 	public void setTouchEnabled(boolean touchEnabled) {
 		this.touchEnabled = touchEnabled;
-	}
-
-	public void setGravityEnabled(boolean gravityEnabled) {
-		this.gravityEnabled = gravityEnabled;
 	}
 
 	public void setGravityInverted(boolean gravityInverted) {

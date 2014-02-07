@@ -10,11 +10,6 @@
             android:title="@string/enabletouch_settings" >
         </CheckBoxPreference>
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="gravity"
-            android:title="@string/enablegravity_settings" >
-        </CheckBoxPreference>
-        <CheckBoxPreference
             android:defaultValue="false"
             android:key="invert"
             android:title="@string/invertgravity_settings" >

@@ -26,6 +26,10 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 		this.background = back;
 	}
 
+	public void setBackground(Bitmap back) {
+		background = back;
+	}
+
 	@Override
 	public boolean isDynamic() {
 		return true;
