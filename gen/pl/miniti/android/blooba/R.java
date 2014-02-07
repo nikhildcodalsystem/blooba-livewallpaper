@@ -44,9 +44,15 @@ public final class R {
     public static final class string {
         public static final int app_description=0x7f060001;
         public static final int app_name=0x7f060000;
+        public static final int b_stars=0x7f060013;
         public static final int blooba_settings=0x7f060002;
         public static final int enablegravity_settings=0x7f060005;
         public static final int enabletouch_settings=0x7f060004;
+        public static final int f_bieber=0x7f060014;
+        public static final int f_earth=0x7f060015;
+        public static final int f_ironman=0x7f060016;
+        public static final int f_kenny=0x7f060017;
+        public static final int f_squishy=0x7f060018;
         public static final int general_settings=0x7f060003;
         public static final int invertgravity_settings=0x7f060006;
         public static final int quality_settings=0x7f060007;

@@ -26,7 +26,7 @@ public class BloobaBackground extends Activity implements View.OnClickListener {
 		GridView gridView = (GridView) findViewById(R.id.grid_view);
 
 		Miniature[] minis = new Miniature[]{new Miniature(
-				R.drawable.bg_stars_xs, "Stars", this)};
+				R.drawable.bg_stars_xs, R.string.b_stars, this)};
 
 		gridView.setAdapter(new ImageAdapter(this, minis));
 

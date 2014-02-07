@@ -15,7 +15,7 @@ public class Miniature {
 
 	private int resource;
 
-	private String description;
+	private int description;
 
 	private View.OnClickListener listener;
 
@@ -23,7 +23,7 @@ public class Miniature {
 	 * @param resource
 	 * @param description
 	 */
-	public Miniature(int resource, String description,
+	public Miniature(int resource, int description,
 			View.OnClickListener listener) {
 		super();
 		this.resource = resource;
@@ -35,7 +35,7 @@ public class Miniature {
 		return resource;
 	}
 
-	public String getDescription() {
+	public int getDescription() {
 		return description;
 	}
 
