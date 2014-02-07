@@ -360,6 +360,10 @@ public class Blooba {
 					{p2[0], p2[1], p4[0], p4[1]}, {p3[0], p3[1], p5[0], p5[1]}});
 
 		}
+
+		if (fProvider.isDynamic()) {
+			texture.recycle();
+		}
 	}
 
 	/**

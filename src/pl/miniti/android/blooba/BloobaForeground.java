@@ -24,14 +24,18 @@ import android.widget.GridView;
 public class BloobaForeground extends Activity implements OnItemClickListener {
 
 	private final Miniature[] minis = new Miniature[]{
-			new Miniature(R.drawable.earth_xs, R.string.f_earth,
-					R.drawable.earth, Type.IMAGE),
-			new Miniature(R.drawable.moon_xs, R.string.f_moon, R.drawable.moon,
+			new Miniature(R.drawable.earth_xs, R.string.f_earth, "earth",
 					Type.IMAGE),
-			new Miniature(R.drawable.kenny_xs, R.string.f_kenny,
-					R.drawable.kenny, Type.IMAGE),
-			new Miniature(R.drawable.squish_xs, R.string.f_squishy,
-					R.drawable.squish, Type.IMAGE)};
+			new Miniature(R.drawable.moon_xs, R.string.f_moon, "moon",
+					Type.IMAGE),
+			new Miniature(R.drawable.kenny_xs, R.string.f_kenny, "kenny",
+					Type.IMAGE),
+			new Miniature(R.drawable.squish_xs, R.string.f_squishy, "squish",
+					Type.IMAGE),
+			new Miniature(R.drawable.squish_xs, R.string.f_bubble, "bubble",
+					Type.IMAGE),
+			new Miniature(R.drawable.squish_xs, R.string.f_water, "bubble",
+					Type.REFLECTION)};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putInt("foreground", mini.getResource());
+		editor.putString("foreground_name", mini.getResource());
 		editor.putInt("foreground_type", mini.getType().ordinal());
 		editor.commit();
 		super.finish();

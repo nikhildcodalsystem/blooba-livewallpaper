@@ -24,8 +24,7 @@ import android.widget.GridView;
 public class BloobaBackground extends Activity implements OnItemClickListener {
 
 	private final Miniature[] minis = new Miniature[]{new Miniature(
-			R.drawable.bg_stars_xs, R.string.b_stars, R.drawable.bg_stars,
-			Type.IMAGE)};
+			R.drawable.bg_stars_xs, R.string.b_stars, "stars", Type.IMAGE)};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,7 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putInt("background", mini.getResource());
+		editor.putString("background_name", mini.getResource());
 		editor.putInt("background_type", mini.getType().ordinal());
 		editor.commit();
 		super.finish();

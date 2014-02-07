@@ -15,7 +15,7 @@ public class Miniature {
 	};
 
 	private int mini;
-	private int resource;
+	private String resource;
 	private int description;
 	private Type type;
 
@@ -23,7 +23,7 @@ public class Miniature {
 	 * @param resource
 	 * @param description
 	 */
-	public Miniature(int mini, int description, int resource, Type type) {
+	public Miniature(int mini, int description, String resource, Type type) {
 		super();
 		this.mini = mini;
 		this.resource = resource;
@@ -35,7 +35,7 @@ public class Miniature {
 		return mini;
 	}
 
-	public int getResource() {
+	public String getResource() {
 		return resource;
 	}
 

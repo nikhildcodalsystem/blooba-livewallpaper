@@ -187,7 +187,7 @@ public class BloobaService extends WallpaperService {
 				}
 			}
 
-			int resource = bloobaPreferences.getBackground();
+			int resource = resolveResource(bloobaPreferences.getBackground());
 			if (width > height) {
 				Matrix matrix = new Matrix();
 				matrix.setRotate(90f);
@@ -207,17 +207,33 @@ public class BloobaService extends WallpaperService {
 				case REFLECTION :
 					fProvider = new ReflectionForegroundProvider(
 							BitmapFactory.decodeResource(getResources(),
-									bloobaPreferences.getForeground()),
-							this.background);
+									resolveResource(bloobaPreferences
+											.getForeground())), this.background);
 				case IMAGE :
 				default :
 					fProvider = new ImageForegroundProvider(
 							BitmapFactory.decodeResource(getResources(),
-									bloobaPreferences.getForeground()));
+									resolveResource(bloobaPreferences
+											.getForeground())));
 			}
 
 			blooba = new Blooba(fProvider, width, height, bloobaPreferences);
 
+		}
+		private int resolveResource(String name) {
+			if (name.equals("moon")) {
+				return R.drawable.moon;
+			} else if (name.equals("kenny")) {
+				return R.drawable.kenny;
+			} else if (name.equals("squish")) {
+				return R.drawable.squish;
+			} else if (name.equals("stars")) {
+				return R.drawable.bg_stars;
+			} else if (name.equals("bubble")) {
+				return R.drawable.bubble;
+			} else {
+				return R.drawable.earth;
+			}
 		}
 
 	}

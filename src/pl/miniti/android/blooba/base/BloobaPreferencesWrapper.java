@@ -6,7 +6,6 @@
  */
 package pl.miniti.android.blooba.base;
 
-import pl.miniti.android.blooba.R;
 import pl.miniti.android.blooba.preferences.Miniature;
 import android.content.SharedPreferences;
 
@@ -22,9 +21,9 @@ public class BloobaPreferencesWrapper {
 	private int speed;
 	private float size;
 	private float relaxFactor;
-	private int foreground;
+	private String foreground;
 	private int foregroundType;
-	private int background;
+	private String background;
 	private int backgroundType;
 
 	/**
@@ -50,10 +49,10 @@ public class BloobaPreferencesWrapper {
 		settings.size = Float.valueOf(prefs.getString("size", "0.5"));
 		settings.relaxFactor = Float.valueOf(prefs.getString("relax", "0.9"));
 		settings.speed = Integer.valueOf(prefs.getString("speed", "10"));
-		settings.foreground = prefs.getInt("foreground", R.drawable.earth);
+		settings.foreground = prefs.getString("foreground_name", "earth");
 		settings.foregroundType = prefs.getInt("foreground_type",
 				Miniature.Type.IMAGE.ordinal());
-		settings.background = prefs.getInt("background", R.drawable.bg_stars);
+		settings.background = prefs.getString("background_name", "stars");
 		settings.backgroundType = prefs.getInt("background_type",
 				Miniature.Type.IMAGE.ordinal());
 		return settings;
@@ -115,11 +114,11 @@ public class BloobaPreferencesWrapper {
 		this.speed = speed;
 	}
 
-	public int getForeground() {
+	public String getForeground() {
 		return foreground;
 	}
 
-	public void setForeground(int foreground) {
+	public void setForeground(String foreground) {
 		this.foreground = foreground;
 	}
 
@@ -131,11 +130,11 @@ public class BloobaPreferencesWrapper {
 		this.foregroundType = foregroundType;
 	}
 
-	public int getBackground() {
+	public String getBackground() {
 		return background;
 	}
 
-	public void setBackground(int background) {
+	public void setBackground(String background) {
 		this.background = background;
 	}
 

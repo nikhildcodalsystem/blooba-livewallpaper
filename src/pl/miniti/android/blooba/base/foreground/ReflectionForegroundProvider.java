@@ -7,13 +7,19 @@
 package pl.miniti.android.blooba.base.foreground;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
 
 /**
  */
 public class ReflectionForegroundProvider implements ForegroundProvider {
 
-	public ReflectionForegroundProvider(Bitmap front, Bitmap back) {
+	private Bitmap front;
+	private Bitmap background;
 
+	public ReflectionForegroundProvider(Bitmap front, Bitmap back) {
+		this.front = front;
+		this.background = back;
 	}
 
 	@Override
@@ -23,17 +29,20 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 
 	@Override
 	public void initForSize(int size) {
-		// TODO
+		front = Bitmap.createScaledBitmap(front, size, size, false);
 	}
 
 	@Override
 	public Bitmap getTexture(float x, float y, int size) {
-		return null;
+		Bitmap texture = Bitmap.createBitmap(size, size, Config.ARGB_8888);
+		Canvas c = new Canvas(texture);
+		c.drawBitmap(front, 0, 0, null);
+		return texture;
 	}
 
 	@Override
 	public void destroy() {
-		// TODO
+		front.recycle();
 	}
 
 }
