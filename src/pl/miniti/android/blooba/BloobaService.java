@@ -209,6 +209,7 @@ public class BloobaService extends WallpaperService {
 							BitmapFactory.decodeResource(getResources(),
 									resolveResource(bloobaPreferences
 											.getForeground())), this.background);
+					break;
 				case IMAGE :
 				default :
 					fProvider = new ImageForegroundProvider(

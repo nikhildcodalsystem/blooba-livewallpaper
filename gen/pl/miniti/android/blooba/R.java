@@ -24,15 +24,16 @@ public final class R {
         public static final int bg_stars=0x7f020000;
         public static final int bg_stars_xs=0x7f020001;
         public static final int bubble=0x7f020002;
-        public static final int earth=0x7f020003;
-        public static final int earth_xs=0x7f020004;
-        public static final int ic_launcher=0x7f020005;
-        public static final int kenny=0x7f020006;
-        public static final int kenny_xs=0x7f020007;
-        public static final int moon=0x7f020008;
-        public static final int moon_xs=0x7f020009;
-        public static final int squish=0x7f02000a;
-        public static final int squish_xs=0x7f02000b;
+        public static final int bubble_xs=0x7f020003;
+        public static final int earth=0x7f020004;
+        public static final int earth_xs=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int kenny=0x7f020007;
+        public static final int kenny_xs=0x7f020008;
+        public static final int moon=0x7f020009;
+        public static final int moon_xs=0x7f02000a;
+        public static final int squish=0x7f02000b;
+        public static final int squish_xs=0x7f02000c;
     }
     public static final class id {
         public static final int grid_view=0x7f080000;
