@@ -82,6 +82,7 @@ public class BloobaService extends WallpaperService {
 		@Override
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
+			// TODO some abstraction not to use a new blooba :/
 			newBlooba();
 		}
 
