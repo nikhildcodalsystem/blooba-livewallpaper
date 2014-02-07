@@ -31,4 +31,9 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 		return null;
 	}
 
+	@Override
+	public void destroy() {
+		// TODO
+	}
+
 }

@@ -163,6 +163,13 @@ public class BloobaService extends WallpaperService {
 		}
 
 		private void newBlooba() {
+			if (blooba != null) {
+				background.recycle();
+				background = null;
+				blooba.destroy();
+				blooba = null;
+			}
+
 			SharedPreferences preferences = PreferenceManager
 					.getDefaultSharedPreferences(BloobaService.this);
 			bloobaPreferences = BloobaPreferencesWrapper
@@ -183,11 +190,11 @@ public class BloobaService extends WallpaperService {
 			if (width > height) {
 				Matrix matrix = new Matrix();
 				matrix.setRotate(90f);
-				this.background = Bitmap.createBitmap(
+				background = Bitmap.createBitmap(
 						BitmapFactory.decodeResource(getResources(), resource),
 						0, 0, width, height, matrix, false);
 			} else {
-				this.background = Bitmap.createScaledBitmap(
+				background = Bitmap.createScaledBitmap(
 						BitmapFactory.decodeResource(getResources(), resource),
 						width, height, false);
 			}
@@ -208,8 +215,7 @@ public class BloobaService extends WallpaperService {
 									bloobaPreferences.getForeground()));
 			}
 
-			this.blooba = new Blooba(fProvider, width, height,
-					bloobaPreferences);
+			blooba = new Blooba(fProvider, width, height, bloobaPreferences);
 
 		}
 

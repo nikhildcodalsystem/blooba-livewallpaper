@@ -18,4 +18,6 @@ public interface ForegroundProvider {
 
 	Bitmap getTexture(float x, float y, int size);
 
+	void destroy();
+
 }

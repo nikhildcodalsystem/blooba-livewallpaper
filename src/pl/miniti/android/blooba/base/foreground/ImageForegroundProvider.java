@@ -27,9 +27,16 @@ public class ImageForegroundProvider implements ForegroundProvider {
 	public void initForSize(int size) {
 		texture = Bitmap.createScaledBitmap(texture, size, size, false);
 	}
+
 	@Override
 	public Bitmap getTexture(float x, float y, int rad) {
 		return texture;
+	}
+
+	@Override
+	public void destroy() {
+		texture.recycle();
+		texture = null;
 	}
 
 }

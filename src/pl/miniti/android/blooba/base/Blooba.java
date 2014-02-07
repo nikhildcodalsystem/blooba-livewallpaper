@@ -429,4 +429,8 @@ public class Blooba {
 		canvas.restore();
 	}
 
+	public void destroy() {
+		fProvider.destroy();
+	}
+
 }
