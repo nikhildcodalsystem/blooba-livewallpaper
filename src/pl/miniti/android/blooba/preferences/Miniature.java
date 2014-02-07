@@ -4,31 +4,35 @@
  * Created: Feb 7, 2014
  * Copyright 2014 by miniti
  */
-
 package pl.miniti.android.blooba.preferences;
-
-import android.view.View;
 
 /**
  */
 public class Miniature {
 
+	public static enum Type {
+		IMAGE, REFLECTION
+	};
+
+	private int mini;
 	private int resource;
-
 	private int description;
-
-	private View.OnClickListener listener;
+	private Type type;
 
 	/**
 	 * @param resource
 	 * @param description
 	 */
-	public Miniature(int resource, int description,
-			View.OnClickListener listener) {
+	public Miniature(int mini, int description, int resource, Type type) {
 		super();
+		this.mini = mini;
 		this.resource = resource;
 		this.description = description;
-		this.listener = listener;
+		this.type = type;
+	}
+
+	public int getMini() {
+		return mini;
 	}
 
 	public int getResource() {
@@ -39,8 +43,8 @@ public class Miniature {
 		return description;
 	}
 
-	public View.OnClickListener getListener() {
-		return listener;
+	public Type getType() {
+		return type;
 	}
 
 }

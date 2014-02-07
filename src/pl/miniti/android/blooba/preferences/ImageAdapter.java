@@ -51,7 +51,7 @@ public class ImageAdapter extends BaseAdapter {
 		lpi.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
 		ImageView imageView = new ImageView(mContext);
-		imageView.setImageResource(thumbs[position].getResource());
+		imageView.setImageResource(thumbs[position].getMini());
 		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 		imageView.setId(1);
 
@@ -66,8 +66,6 @@ public class ImageAdapter extends BaseAdapter {
 
 		layout.addView(imageView, lpi);
 		layout.addView(textView, lpt);
-
-		layout.setOnClickListener(thumbs[position].getListener());
 
 		return layout;
 	}

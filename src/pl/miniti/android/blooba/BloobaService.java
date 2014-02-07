@@ -10,6 +10,8 @@ import pl.miniti.android.blooba.base.Blooba;
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
 import pl.miniti.android.blooba.base.foreground.ForegroundProvider;
 import pl.miniti.android.blooba.base.foreground.ImageForegroundProvider;
+import pl.miniti.android.blooba.base.foreground.ReflectionForegroundProvider;
+import pl.miniti.android.blooba.preferences.Miniature;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -63,7 +65,6 @@ public class BloobaService extends WallpaperService {
 		private Blooba blooba;
 		private BloobaPreferencesWrapper bloobaPreferences;
 		private boolean visible = true;
-		private int frontResource = R.drawable.earth;
 		private Bitmap background;
 
 		/**
@@ -124,7 +125,7 @@ public class BloobaService extends WallpaperService {
 		public void onSurfaceChanged(SurfaceHolder holder, int format,
 				int width, int height) {
 
-			int resource = R.drawable.bg_stars;
+			int resource = bloobaPreferences.getBackground();
 			if (width > height) {
 				Matrix matrix = new Matrix();
 				matrix.setRotate(90f);
@@ -137,8 +138,21 @@ public class BloobaService extends WallpaperService {
 						width, height, false);
 			}
 
-			ForegroundProvider fProvider = new ImageForegroundProvider(
-					BitmapFactory.decodeResource(getResources(), frontResource));
+			ForegroundProvider fProvider = null;
+			Miniature.Type fType = Miniature.Type.values()[bloobaPreferences
+					.getForegroundType()];
+			switch (fType) {
+				case REFLECTION :
+					fProvider = new ReflectionForegroundProvider(
+							BitmapFactory.decodeResource(getResources(),
+									bloobaPreferences.getForeground()),
+							this.background);
+				case IMAGE :
+				default :
+					fProvider = new ImageForegroundProvider(
+							BitmapFactory.decodeResource(getResources(),
+									bloobaPreferences.getForeground()));
+			}
 
 			this.blooba = new Blooba(fProvider, width, height,
 					bloobaPreferences);
@@ -148,7 +162,7 @@ public class BloobaService extends WallpaperService {
 
 		@Override
 		public void onTouchEvent(MotionEvent event) {
-			if (bloobaPreferences.isTouchEnabled()) {
+			if (blooba != null && bloobaPreferences.isTouchEnabled()) {
 				blooba.registerMotionEvent(event);
 			} else {
 				super.onTouchEvent(event);
@@ -162,7 +176,7 @@ public class BloobaService extends WallpaperService {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			if (bloobaPreferences.isGravityEnabled()) {
+			if (blooba != null && bloobaPreferences.isGravityEnabled()) {
 				blooba.registerSensorEvent(event);
 			}
 		}
