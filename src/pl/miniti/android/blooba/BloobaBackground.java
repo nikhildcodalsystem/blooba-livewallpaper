@@ -1,7 +1,7 @@
 /**
- * BloobaForeground.java
+ * BloobaBackground.java
  * Author: marek.brodziak@gmail.com
- * Created: Feb 6, 2014
+ * Created: Feb 7, 2014
  * Copyright 2014 by miniti
  */
 
@@ -15,14 +15,9 @@ import android.widget.GridView;
 
 /**
  */
-public class BloobaForeground extends Activity {
+public class BloobaBackground extends Activity {
 
-	private static Miniature[] minis = new Miniature[]{
-			new Miniature(R.drawable.bieber_xs, "Bieber"),
-			new Miniature(R.drawable.earth_xs, "Earth"),
-			new Miniature(R.drawable.ironman_xs, "Iron Man"),
-			new Miniature(R.drawable.kenny_xs, "Kenny"),
-			new Miniature(R.drawable.squish_xs, "Squishy")};
+	private static Miniature[] minis = new Miniature[]{};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

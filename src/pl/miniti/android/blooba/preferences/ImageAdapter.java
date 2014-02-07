@@ -10,18 +10,18 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  */
 public class ImageAdapter extends BaseAdapter {
 	private Context mContext;
 
-	private Integer[] thumbs;
+	private Miniature[] thumbs;
 
-	// Constructor
-	public ImageAdapter(Context c, Integer[] thumbs) {
+	public ImageAdapter(Context c, Miniature[] thumbs) {
 		mContext = c;
 		this.thumbs = thumbs;
 	}
@@ -43,11 +43,30 @@ public class ImageAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView imageView = new ImageView(mContext);
-		imageView.setImageResource(thumbs[position]);
-		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		imageView.setLayoutParams(new GridView.LayoutParams(70, 70));
-		return imageView;
-	}
+		RelativeLayout layout = new RelativeLayout(mContext);
 
+		RelativeLayout.LayoutParams lpi = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		lpi.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+		ImageView imageView = new ImageView(mContext);
+		imageView.setImageResource(thumbs[position].getResource());
+		imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+		imageView.setId(1);
+
+		RelativeLayout.LayoutParams lpt = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		lpt.addRule(RelativeLayout.BELOW, imageView.getId());
+		lpt.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+		TextView textView = new TextView(mContext);
+		textView.setText(thumbs[position].getDescription());
+
+		layout.addView(imageView, lpi);
+		layout.addView(textView, lpt);
+
+		return layout;
+	}
 }
