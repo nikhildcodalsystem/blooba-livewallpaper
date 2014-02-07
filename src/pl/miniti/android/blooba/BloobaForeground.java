@@ -34,7 +34,7 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 					Type.IMAGE),
 			new Miniature(R.drawable.bubble_xs, R.string.f_bubble, "bubble",
 					Type.IMAGE),
-			new Miniature(R.drawable.squish_xs, R.string.f_water, "bubble",
+			new Miniature(R.drawable.water_xs, R.string.f_water, "bubble",
 					Type.REFLECTION)};
 
 	@Override

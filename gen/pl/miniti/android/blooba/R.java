@@ -34,6 +34,7 @@ public final class R {
         public static final int moon_xs=0x7f02000a;
         public static final int squish=0x7f02000b;
         public static final int squish_xs=0x7f02000c;
+        public static final int water_xs=0x7f02000d;
     }
     public static final class id {
         public static final int grid_view=0x7f080000;
