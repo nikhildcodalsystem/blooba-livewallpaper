@@ -23,17 +23,15 @@ public final class R {
     public static final class drawable {
         public static final int bg_stars=0x7f020000;
         public static final int bg_stars_xs=0x7f020001;
-        public static final int bieber=0x7f020002;
-        public static final int bieber_xs=0x7f020003;
-        public static final int earth=0x7f020004;
-        public static final int earth_xs=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int ironman=0x7f020007;
-        public static final int ironman_xs=0x7f020008;
-        public static final int kenny=0x7f020009;
-        public static final int kenny_xs=0x7f02000a;
-        public static final int squish=0x7f02000b;
-        public static final int squish_xs=0x7f02000c;
+        public static final int earth=0x7f020002;
+        public static final int earth_xs=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int kenny=0x7f020005;
+        public static final int kenny_xs=0x7f020006;
+        public static final int moon=0x7f020007;
+        public static final int moon_xs=0x7f020008;
+        public static final int squish=0x7f020009;
+        public static final int squish_xs=0x7f02000a;
     }
     public static final class id {
         public static final int grid_view=0x7f080000;
@@ -48,11 +46,10 @@ public final class R {
         public static final int blooba_settings=0x7f060002;
         public static final int enablegravity_settings=0x7f060005;
         public static final int enabletouch_settings=0x7f060004;
-        public static final int f_bieber=0x7f060014;
-        public static final int f_earth=0x7f060015;
-        public static final int f_ironman=0x7f060016;
-        public static final int f_kenny=0x7f060017;
-        public static final int f_squishy=0x7f060018;
+        public static final int f_earth=0x7f060014;
+        public static final int f_kenny=0x7f060016;
+        public static final int f_moon=0x7f060015;
+        public static final int f_squishy=0x7f060017;
         public static final int general_settings=0x7f060003;
         public static final int invertgravity_settings=0x7f060006;
         public static final int quality_settings=0x7f060007;

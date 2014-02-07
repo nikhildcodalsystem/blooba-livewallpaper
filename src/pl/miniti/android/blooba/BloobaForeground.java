@@ -24,12 +24,10 @@ import android.widget.GridView;
 public class BloobaForeground extends Activity implements OnItemClickListener {
 
 	private final Miniature[] minis = new Miniature[]{
-			new Miniature(R.drawable.bieber_xs, R.string.f_bieber,
-					R.drawable.bieber, Type.IMAGE),
 			new Miniature(R.drawable.earth_xs, R.string.f_earth,
 					R.drawable.earth, Type.IMAGE),
-			new Miniature(R.drawable.ironman_xs, R.string.f_ironman,
-					R.drawable.ironman, Type.IMAGE),
+			new Miniature(R.drawable.moon_xs, R.string.f_moon, R.drawable.moon,
+					Type.IMAGE),
 			new Miniature(R.drawable.kenny_xs, R.string.f_kenny,
 					R.drawable.kenny, Type.IMAGE),
 			new Miniature(R.drawable.squish_xs, R.string.f_squishy,
