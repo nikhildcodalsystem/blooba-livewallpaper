@@ -66,6 +66,8 @@ public class BloobaService extends WallpaperService {
 		private BloobaPreferencesWrapper bloobaPreferences;
 		private boolean visible = true;
 		private Bitmap background;
+		private int width;
+		private int height;
 
 		/**
 		 * 
@@ -74,27 +76,13 @@ public class BloobaService extends WallpaperService {
 			SharedPreferences preferences = PreferenceManager
 					.getDefaultSharedPreferences(BloobaService.this);
 			preferences.registerOnSharedPreferenceChangeListener(this);
-
-			bloobaPreferences = BloobaPreferencesWrapper
-					.fromPreferences(preferences);
-			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-			if (bloobaPreferences.isGravityEnabled()) {
-				gravitySensor = sensorManager
-						.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-				if (gravitySensor == null) {
-					bloobaPreferences.setGravityEnabled(false);
-				} else {
-					sensorManager.registerListener(this, gravitySensor,
-							SensorManager.SENSOR_DELAY_FASTEST);
-				}
-			}
 			handler.post(drawRunner);
 		}
 
 		@Override
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
-			// TODO
+			newBlooba();
 		}
 
 		@Override
@@ -124,39 +112,9 @@ public class BloobaService extends WallpaperService {
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format,
 				int width, int height) {
-
-			int resource = bloobaPreferences.getBackground();
-			if (width > height) {
-				Matrix matrix = new Matrix();
-				matrix.setRotate(90f);
-				this.background = Bitmap.createBitmap(
-						BitmapFactory.decodeResource(getResources(), resource),
-						0, 0, width, height, matrix, false);
-			} else {
-				this.background = Bitmap.createScaledBitmap(
-						BitmapFactory.decodeResource(getResources(), resource),
-						width, height, false);
-			}
-
-			ForegroundProvider fProvider = null;
-			Miniature.Type fType = Miniature.Type.values()[bloobaPreferences
-					.getForegroundType()];
-			switch (fType) {
-				case REFLECTION :
-					fProvider = new ReflectionForegroundProvider(
-							BitmapFactory.decodeResource(getResources(),
-									bloobaPreferences.getForeground()),
-							this.background);
-				case IMAGE :
-				default :
-					fProvider = new ImageForegroundProvider(
-							BitmapFactory.decodeResource(getResources(),
-									bloobaPreferences.getForeground()));
-			}
-
-			this.blooba = new Blooba(fProvider, width, height,
-					bloobaPreferences);
-
+			this.width = width;
+			this.height = height;
+			newBlooba();
 			super.onSurfaceChanged(holder, format, width, height);
 		}
 
@@ -202,6 +160,57 @@ public class BloobaService extends WallpaperService {
 			if (visible) {
 				handler.postDelayed(drawRunner, 41);
 			}
+		}
+
+		private void newBlooba() {
+			SharedPreferences preferences = PreferenceManager
+					.getDefaultSharedPreferences(BloobaService.this);
+			bloobaPreferences = BloobaPreferencesWrapper
+					.fromPreferences(preferences);
+			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+			if (bloobaPreferences.isGravityEnabled()) {
+				gravitySensor = sensorManager
+						.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+				if (gravitySensor == null) {
+					bloobaPreferences.setGravityEnabled(false);
+				} else {
+					sensorManager.registerListener(this, gravitySensor,
+							SensorManager.SENSOR_DELAY_FASTEST);
+				}
+			}
+
+			int resource = bloobaPreferences.getBackground();
+			if (width > height) {
+				Matrix matrix = new Matrix();
+				matrix.setRotate(90f);
+				this.background = Bitmap.createBitmap(
+						BitmapFactory.decodeResource(getResources(), resource),
+						0, 0, width, height, matrix, false);
+			} else {
+				this.background = Bitmap.createScaledBitmap(
+						BitmapFactory.decodeResource(getResources(), resource),
+						width, height, false);
+			}
+
+			ForegroundProvider fProvider = null;
+			Miniature.Type fType = Miniature.Type.values()[bloobaPreferences
+					.getForegroundType()];
+			switch (fType) {
+				case REFLECTION :
+					fProvider = new ReflectionForegroundProvider(
+							BitmapFactory.decodeResource(getResources(),
+									bloobaPreferences.getForeground()),
+							this.background);
+				case IMAGE :
+				default :
+					fProvider = new ImageForegroundProvider(
+							BitmapFactory.decodeResource(getResources(),
+									bloobaPreferences.getForeground()));
+			}
+
+			this.blooba = new Blooba(fProvider, width, height,
+					bloobaPreferences);
+
 		}
 
 	}
