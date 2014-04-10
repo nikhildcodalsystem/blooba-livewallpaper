@@ -217,8 +217,16 @@ public class BloobaService extends WallpaperService {
 				return R.drawable.squish;
 			} else if (name.equals("stars")) {
 				return R.drawable.bg_stars;
+			} else if (name.equals("blue")) {
+				return R.drawable.bg_blue;
+			} else if (name.equals("mosaic")) {
+				return R.drawable.bg_mosaic;
 			} else if (name.equals("bubble")) {
 				return R.drawable.bubble;
+			} else if (name.equals("basketball")) {
+				return R.drawable.basketball;
+			} else if (name.equals("chrisbrown")) {
+				return R.drawable.chrisbrown;
 			} else {
 				return R.drawable.earth;
 			}

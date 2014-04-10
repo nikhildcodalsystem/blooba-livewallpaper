@@ -19,11 +19,15 @@
     <string name="select_background">Select Background</string>
     <string name="select_background_summary">Blooba Foreground Bitmap</string>
     <string name="b_stars">Stars</string>
+    <string name="b_blue">Blue</string>
+    <string name="b_mosaic">Mosaic</string>
     <string name="f_earth">Earth</string>
     <string name="f_moon">Moon</string>
     <string name="f_bubble">Bubble</string>
     <string name="f_water">Water</string>
     <string name="f_kenny">Kenny</string>
     <string name="f_squishy">Squishy</string>
+    <string name="f_basketball">Basketball</string>
+    <string name="f_chrisbrown">Chris Brown</string>
 
 </resources>

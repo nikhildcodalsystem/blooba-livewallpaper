@@ -23,8 +23,13 @@ import android.widget.GridView;
  */
 public class BloobaBackground extends Activity implements OnItemClickListener {
 
-	private final Miniature[] minis = new Miniature[]{new Miniature(
-			R.drawable.bg_stars_xs, R.string.b_stars, "stars", Type.IMAGE)};
+	private final Miniature[] minis = new Miniature[]{
+			new Miniature(R.drawable.bg_stars_xs, R.string.b_stars, "stars",
+					Type.IMAGE),
+			new Miniature(R.drawable.bg_blue_xs, R.string.b_blue, "blue",
+					Type.IMAGE),
+			new Miniature(R.drawable.bg_mosaic_xs, R.string.b_mosaic, "mosaic",
+					Type.IMAGE)};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
