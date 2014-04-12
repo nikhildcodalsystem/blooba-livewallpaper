@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Blooba Live Wallpaper</string>
-    <string name="app_description">Highly customizable blob for your Android!</string>
+    <string name="app_description">Friendly blob for your Android!</string>
     <string name="blooba_settings">Blooba Settings</string>
     <string name="general_settings">General</string>
     <string name="enabletouch_settings">Enable Touch</string>
@@ -19,8 +19,10 @@
     <string name="select_background">Select Background</string>
     <string name="select_background_summary">Blooba Foreground Bitmap</string>
     <string name="b_stars">Stars</string>
-    <string name="b_blue">Blue</string>
-    <string name="b_mosaic">Mosaic</string>
+    <string name="b_beach">Beach</string>
+    <string name="b_boards">Boards</string>
+    <string name="b_green">Green</string>
+    <string name="b_underwater">Underwater</string>
     <string name="f_earth">Earth</string>
     <string name="f_moon">Moon</string>
     <string name="f_bubble">Bubble</string>
@@ -28,6 +30,13 @@
     <string name="f_kenny">Kenny</string>
     <string name="f_squishy">Squishy</string>
     <string name="f_basketball">Basketball</string>
-    <string name="f_chrisbrown">Chris Brown</string>
+    <string name="f_nemo">Nemo</string>
+    <string name="f_america">America</string>
+    <string name="f_bpink">Pink Balloon</string>
+    <string name="f_bblack">Black Balloon</string>
+    <string name="f_donut">Donut</string>
+    <string name="f_penny">Penny</string>
+    <string name="f_spider">Spider</string>
+    <string name="own">From Gallery</string>
 
 </resources>

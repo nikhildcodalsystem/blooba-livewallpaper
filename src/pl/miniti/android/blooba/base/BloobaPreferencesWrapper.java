@@ -142,4 +142,12 @@ public class BloobaPreferencesWrapper {
 		this.backgroundType = backgroundType;
 	}
 
+	public boolean isBackgroundUserDefined() {
+		return this.backgroundType == Miniature.Type.GALLERY.ordinal();
+	}
+
+	public boolean isForegroundUserDefined() {
+		return this.foregroundType == Miniature.Type.GALLERY.ordinal();
+	}
+
 }

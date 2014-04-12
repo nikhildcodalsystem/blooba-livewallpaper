@@ -11,7 +11,7 @@ package pl.miniti.android.blooba.preferences;
 public class Miniature {
 
 	public static enum Type {
-		IMAGE, REFLECTION
+		IMAGE, REFLECTION, GALLERY
 	};
 
 	private int mini;

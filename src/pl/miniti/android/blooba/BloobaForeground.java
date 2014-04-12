@@ -38,8 +38,20 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 					Type.REFLECTION),
 			new Miniature(R.drawable.basketball_xs, R.string.f_basketball,
 					"basketball", Type.IMAGE),
-			new Miniature(R.drawable.chrisbrown_xs, R.string.f_chrisbrown,
-					"chrisbrown", Type.IMAGE)};
+			new Miniature(R.drawable.nemo_xs, R.string.f_nemo, "nemo",
+					Type.IMAGE),
+			new Miniature(R.drawable.america_xs, R.string.f_america, "america",
+					Type.IMAGE),
+			new Miniature(R.drawable.balloon_pink_xs, R.string.f_bpink,
+					"bpink", Type.IMAGE),
+			new Miniature(R.drawable.balloon_black_xs, R.string.f_bblack,
+					"bblack", Type.IMAGE),
+			new Miniature(R.drawable.donut_xs, R.string.f_donut, "donut",
+					Type.IMAGE),
+			new Miniature(R.drawable.penny_xs, R.string.f_penny, "penny",
+					Type.IMAGE),
+			new Miniature(R.drawable.spider_xs, R.string.f_spider, "spider",
+					Type.IMAGE)};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

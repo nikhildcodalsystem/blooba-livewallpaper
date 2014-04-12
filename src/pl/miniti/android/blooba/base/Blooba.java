@@ -378,7 +378,7 @@ public class Blooba {
 		this.speed = speed;
 	}
 
-	public ForegroundProvider getfProvider() {
+	public ForegroundProvider getForegroundProvider() {
 		return fProvider;
 	}
 

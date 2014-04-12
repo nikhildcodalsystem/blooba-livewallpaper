@@ -11,7 +11,10 @@ import pl.miniti.android.blooba.preferences.ImageAdapter;
 import pl.miniti.android.blooba.preferences.Miniature;
 import pl.miniti.android.blooba.preferences.Miniature.Type;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -23,13 +26,21 @@ import android.widget.GridView;
  */
 public class BloobaBackground extends Activity implements OnItemClickListener {
 
+	private static final int PICK_IMAGE = 304;
+
 	private final Miniature[] minis = new Miniature[]{
 			new Miniature(R.drawable.bg_stars_xs, R.string.b_stars, "stars",
 					Type.IMAGE),
-			new Miniature(R.drawable.bg_blue_xs, R.string.b_blue, "blue",
+			new Miniature(R.drawable.bg_boards_xs, R.string.b_boards, "boards",
 					Type.IMAGE),
-			new Miniature(R.drawable.bg_mosaic_xs, R.string.b_mosaic, "mosaic",
-					Type.IMAGE)};
+			new Miniature(R.drawable.bg_green_xs, R.string.b_green, "green",
+					Type.IMAGE),
+			new Miniature(R.drawable.bg_beach_xs, R.string.b_beach, "beach",
+					Type.IMAGE),
+			new Miniature(R.drawable.bg_underwater_xs, R.string.b_underwater,
+					"underwater", Type.IMAGE),
+			new Miniature(R.drawable.gallery_xs, R.string.own, null,
+					Type.GALLERY)};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,13 +56,47 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Miniature mini = minis[position];
+
+		if (mini.getType() == Miniature.Type.GALLERY) {
+			Intent intent = new Intent();
+			intent.setType("image/*");
+			intent.setAction(Intent.ACTION_GET_CONTENT);
+			startActivityForResult(
+					Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+			return;
+		} else {
+			storeBackgroundPreference(mini.getResource(), mini.getType()
+					.ordinal());
+		}
+
+		super.finish();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+			Uri _uri = data.getData();
+
+			Cursor cursor = getContentResolver()
+					.query(_uri,
+							new String[]{android.provider.MediaStore.Images.ImageColumns.DATA},
+							null, null, null);
+			cursor.moveToFirst();
+			storeBackgroundPreference(cursor.getString(0),
+					Miniature.Type.GALLERY.ordinal());
+			cursor.close();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	private void storeBackgroundPreference(String backgroundName,
+			int backgroundType) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("background_name", mini.getResource());
-		editor.putInt("background_type", mini.getType().ordinal());
+		editor.putString("background_name", backgroundName);
+		editor.putInt("background_type", backgroundType);
 		editor.commit();
-		super.finish();
 	}
 
 }

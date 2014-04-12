@@ -97,8 +97,8 @@ public class BloobaService extends WallpaperService {
 				blooba.setfProvider(getProvider());
 			} else if (key.equals(Preferences.BACKGROUND_NAME)) {
 				loadBackground();
-				if (blooba.getfProvider().isDynamic()) {
-					((ReflectionForegroundProvider) blooba.getfProvider())
+				if (blooba.getForegroundProvider().isDynamic()) {
+					((ReflectionForegroundProvider) blooba.getForegroundProvider())
 							.setBackground(background);
 				}
 			} else {
@@ -217,36 +217,60 @@ public class BloobaService extends WallpaperService {
 				return R.drawable.squish;
 			} else if (name.equals("stars")) {
 				return R.drawable.bg_stars;
-			} else if (name.equals("blue")) {
-				return R.drawable.bg_blue;
-			} else if (name.equals("mosaic")) {
-				return R.drawable.bg_mosaic;
+			} else if (name.equals("beach")) {
+				return R.drawable.bg_beach;
+			} else if (name.equals("boards")) {
+				return R.drawable.bg_boards;
+			} else if (name.equals("green")) {
+				return R.drawable.bg_green;
 			} else if (name.equals("bubble")) {
 				return R.drawable.bubble;
 			} else if (name.equals("basketball")) {
 				return R.drawable.basketball;
-			} else if (name.equals("chrisbrown")) {
-				return R.drawable.chrisbrown;
+			} else if (name.equals("nemo")) {
+				return R.drawable.nemo;
+			} else if (name.equals("underwater")) {
+				return R.drawable.bg_underwater;
+			} else if (name.equals("america")) {
+				return R.drawable.america;
+			} else if (name.equals("donut")) {
+				return R.drawable.donut;
+			} else if (name.equals("bpink")) {
+				return R.drawable.balloon_pink;
+			} else if (name.equals("bblack")) {
+				return R.drawable.balloon_black;
+			} else if (name.equals("spider")) {
+				return R.drawable.spider;
+			} else if (name.equals("penny")) {
+				return R.drawable.penny;
+
 			} else {
 				return R.drawable.earth;
 			}
 		}
-
 		private void loadBackground() {
 			if (background != null) {
 				background.recycle();
 			}
-			int resource = resolveResource(bloobaPreferences.getBackground());
-			if (width > height) {
-				Matrix matrix = new Matrix();
-				matrix.setRotate(90f);
-				background = Bitmap.createBitmap(
-						BitmapFactory.decodeResource(getResources(), resource),
-						0, 0, width, height, matrix, false);
+
+			if (bloobaPreferences.isBackgroundUserDefined()) {
+				background = Bitmap.createScaledBitmap(BitmapFactory
+						.decodeFile(bloobaPreferences.getBackground()), width,
+						height, false);
 			} else {
-				background = Bitmap.createScaledBitmap(
-						BitmapFactory.decodeResource(getResources(), resource),
-						width, height, false);
+				int resource = resolveResource(bloobaPreferences
+						.getBackground());
+				if (width > height) {
+					Matrix matrix = new Matrix();
+					matrix.setRotate(90f);
+					background = Bitmap.createBitmap(BitmapFactory
+							.decodeResource(getResources(), resource), 0, 0,
+							width, height, matrix, false);
+				} else {
+					background = Bitmap.createScaledBitmap(BitmapFactory
+							.decodeResource(getResources(), resource), width,
+							height, false);
+				}
 			}
 		}
 
