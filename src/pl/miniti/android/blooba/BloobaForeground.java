@@ -122,7 +122,7 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 			return;
 		} else {
 			storeForegroundPreference(mini.getPreferenceValue(), mini.getType()
-					.ordinal());
+					.ordinal(), -1, -1, -1);
 		}
 
 		super.finish();
@@ -147,7 +147,7 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 
 			// TODO crop to circle
 			storeForegroundPreference(cursor.getString(0),
-					Miniature.Type.GALLERY.ordinal());
+					Miniature.Type.GALLERY.ordinal(), -1, -1, -1);
 			cursor.close();
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -160,14 +160,30 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 *            foreground resource value
 	 * @param foregroundType
 	 *            type of the resource
+	 * @param x
+	 *            x-axis blooba center
+	 * @param y
+	 *            y-axis blooba center
+	 * @param r
+	 *            blooba radius
 	 */
 	private void storeForegroundPreference(String foregroundName,
-			int foregroundType) {
+			int foregroundType, int x, int y, int r) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("foreground_name", foregroundName);
 		editor.putInt("foreground_type", foregroundType);
+
+		if (x > 0 && y > 0 && r > 0) {
+			// editor.putInt("foreground_x", x);
+			// editor.putInt("foreground_y", y);
+			// editor.putInt("foreground_r", r);
+		} else {
+			editor.remove("foreground_x");
+			editor.remove("foreground_y");
+			editor.remove("foreground_z");
+		}
 		editor.commit();
 	}
 

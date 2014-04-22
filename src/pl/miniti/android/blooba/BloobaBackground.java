@@ -7,13 +7,21 @@
 
 package pl.miniti.android.blooba;
 
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
+import java.util.Map;
+
+import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
 import pl.miniti.android.blooba.preferences.ImageAdapter;
 import pl.miniti.android.blooba.preferences.Miniature;
 import pl.miniti.android.blooba.preferences.Miniature.Type;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -49,6 +57,10 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 					"underwater", Type.IMAGE),
 			new Miniature(R.drawable.gallery_xs, 0, R.string.own, null,
 					Type.GALLERY)};
+
+	private static final Map<String, Integer> counts = new HashMap<String, Integer>();
+
+	private static final Map<String, SoftReference<Bitmap>> cache = new HashMap<String, SoftReference<Bitmap>>();
 
 	/**
 	 * Resolve background resource property with default if not found
@@ -151,4 +163,99 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 		editor.commit();
 	}
 
+	public static final SoftReference<Bitmap> getBitmap(Resources resources,
+			BloobaPreferencesWrapper prefs, int width, int height) {
+
+		final String name = prefs.getBackground();
+
+		if (cache.containsKey(name)) {
+			SoftReference<Bitmap> ref = cache.get(name);
+			if (ref != null && ref.get() != null) {
+				if (counts.containsKey(name)) {
+					counts.put(name, counts.get(name) + 1);
+				} else {
+					counts.put(name, 1);
+				}
+				return ref;
+			}
+
+			cache.remove(name);
+			counts.remove(name);
+		}
+
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+
+		int resource = -1;
+		if (prefs.isBackgroundUserDefined()) {
+			BitmapFactory.decodeFile(name, options);
+		} else {
+			resource = resolveResource(name);
+			BitmapFactory.decodeResource(resources, resource, options);
+		}
+
+		boolean vertical = options.outHeight > options.outWidth;
+		boolean rotate = false;
+		if (height > width) {
+			// screen vertical
+			rotate = !vertical;
+		} else {
+			// screen horizontal
+			rotate = vertical;
+		}
+
+		if (rotate) {
+			// switch w with h
+			int temp = width;
+			width = height;
+			height = temp;
+		}
+
+		options = new BitmapFactory.Options();
+
+		final int h = options.outHeight;
+		final int w = options.outWidth;
+		int inSampleSize = 1;
+
+		if (h > height || w > width) {
+			final int halfHeight = h / 2;
+			final int halfWidth = w / 2;
+			while ((halfHeight / inSampleSize) > height
+					&& (halfWidth / inSampleSize) > width) {
+				inSampleSize *= 2;
+			}
+		}
+
+		options.inSampleSize = inSampleSize;
+
+		SoftReference<Bitmap> ref = null;
+		if (prefs.isBackgroundUserDefined()) {
+			ref = new SoftReference<Bitmap>(BitmapFactory.decodeFile(name,
+					options));
+		} else {
+			ref = new SoftReference<Bitmap>(BitmapFactory.decodeResource(
+					resources, resource, options));
+		}
+
+		cache.put(name, ref);
+		counts.put(name, 1);
+
+		return ref;
+	}
+
+	public static void free(String name) {
+		int count = counts.remove(name);
+
+		if (count > 1) {
+			counts.put(name, count - 1);
+			return;
+		}
+
+		if (cache.containsKey(name)) {
+			SoftReference<Bitmap> ref = cache.remove(name);
+			if (ref != null && ref.get() != null) {
+				ref.get().recycle();
+			}
+		}
+	}
 }

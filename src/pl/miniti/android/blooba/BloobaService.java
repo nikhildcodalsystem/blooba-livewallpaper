@@ -6,6 +6,8 @@
  */
 package pl.miniti.android.blooba;
 
+import java.lang.ref.SoftReference;
+
 import pl.miniti.android.blooba.base.Blooba;
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
 import pl.miniti.android.blooba.base.Preferences;
@@ -37,10 +39,12 @@ import android.view.SurfaceHolder;
 public class BloobaService extends WallpaperService {
 
 	/**
+	 * Instance of the sensor manager
 	 */
 	private SensorManager sensorManager;
 
 	/**
+	 * Instance of the gravity sensor
 	 */
 	private Sensor gravitySensor;
 
@@ -55,6 +59,7 @@ public class BloobaService extends WallpaperService {
 	}
 
 	/**
+	 * Implementation of the blooba live wallpaper engine
 	 */
 	private class BloobaEngine extends Engine
 			implements
@@ -72,7 +77,7 @@ public class BloobaService extends WallpaperService {
 		private Blooba blooba;
 		private BloobaPreferencesWrapper bloobaPreferences;
 		private boolean visible = true;
-		private Bitmap background;
+		private SoftReference<Bitmap> background;
 		private int width;
 		private int height;
 
@@ -100,6 +105,8 @@ public class BloobaService extends WallpaperService {
 
 			// TODO reload when displayed
 
+			String currentBackground = bloobaPreferences.getBackground();
+
 			bloobaPreferences = BloobaPreferencesWrapper
 					.fromPreferences(sharedPreferences);
 			if (key.equals(Preferences.ENABLE_TOUCH)) {
@@ -113,8 +120,9 @@ public class BloobaService extends WallpaperService {
 			} else if (key.equals(Preferences.FOREGROUND_NAME)) {
 				blooba.setForegroundProvider(getForegroundProvider());
 			} else if (key.equals(Preferences.BACKGROUND_NAME)) {
+				BloobaBackground.free(currentBackground);
 				loadBackground();
-				blooba.getForegroundProvider().setBackground(background);
+				blooba.getForegroundProvider().setBackground(background.get());
 			} else {
 				// size && quality
 				newBlooba();
@@ -224,7 +232,7 @@ public class BloobaService extends WallpaperService {
 			try {
 				canvas = holder.lockCanvas();
 				if (canvas != null && blooba != null) {
-					canvas.drawBitmap(background, 0f, 0f, null);
+					canvas.drawBitmap(background.get(), 0f, 0f, null);
 					blooba.requestAnimationFrame(canvas);
 				}
 			} finally {
@@ -242,8 +250,9 @@ public class BloobaService extends WallpaperService {
 		 */
 		private void newBlooba() {
 			if (blooba != null) {
-				background.recycle();
+				BloobaBackground.free(bloobaPreferences.getBackground());
 				background = null;
+
 				blooba.destroy();
 				blooba = null;
 			}
@@ -264,88 +273,14 @@ public class BloobaService extends WallpaperService {
 
 			blooba = new Blooba(getForegroundProvider(), width, height,
 					bloobaPreferences);
-
 		}
 
 		/**
 		 *  
 		 */
 		private void loadBackground() {
-			if (background != null) {
-				background.recycle();
-			}
-
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inJustDecodeBounds = true;
-			int resource = decode(bloobaPreferences.getBackground(), options,
-					bloobaPreferences.isBackgroundUserDefined());
-
-			boolean vertical = options.outHeight > options.outWidth;
-			if (height > width) {
-				// screen vertical
-				background = loadBackgroundBitmap(resource,
-						bloobaPreferences.getBackground(), options, !vertical);
-			} else {
-				// screen horizontal
-				background = loadBackgroundBitmap(resource,
-						bloobaPreferences.getBackground(), options, vertical);
-			}
-		}
-
-		/**
-		 * @param resource
-		 * @param fileName
-		 * @param io
-		 * @param rotate
-		 * @return
-		 */
-		private Bitmap loadBackgroundBitmap(int resource, String fileName,
-				BitmapFactory.Options io, boolean rotate) {
-
-			BitmapFactory.Options options = new BitmapFactory.Options();
-
-			if (rotate) {
-
-			}
-
-			final int h = options.outHeight;
-			final int w = options.outWidth;
-			int inSampleSize = 1;
-
-			if (h > height || w > width) {
-				final int halfHeight = h / 2;
-				final int halfWidth = w / 2;
-				while ((halfHeight / inSampleSize) > height
-						&& (halfWidth / inSampleSize) > width) {
-					inSampleSize *= 2;
-				}
-			}
-
-			options.inSampleSize = inSampleSize;
-
-			if (resource > -1) {
-				return BitmapFactory.decodeResource(getResources(), resource,
-						options);
-			} else {
-				return BitmapFactory.decodeFile(fileName, options);
-			}
-		}
-
-		/**
-		 * @param f
-		 * @param o
-		 * @param u
-		 * @return
-		 */
-		private int decode(String f, BitmapFactory.Options o, boolean u) {
-			int r = -1;
-			if (u) {
-				BitmapFactory.decodeFile(f, o);
-			} else {
-				r = BloobaBackground.resolveResource(f);
-				BitmapFactory.decodeResource(getResources(), r, o);
-			}
-			return r;
+			background = BloobaBackground.getBitmap(getResources(),
+					bloobaPreferences, width, height);
 		}
 
 		/**
@@ -360,7 +295,7 @@ public class BloobaService extends WallpaperService {
 
 					BitmapFactory.decodeResource(getResources(),
 							BloobaForeground.resolveResource(bloobaPreferences
-									.getForeground())), this.background);
+									.getForeground())), this.background.get());
 				case IMAGE :
 				default :
 					return new ImageForegroundProvider(
