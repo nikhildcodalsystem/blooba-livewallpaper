@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
+import pl.miniti.android.blooba.base.Preferences;
 import pl.miniti.android.blooba.preferences.ImageAdapter;
 import pl.miniti.android.blooba.preferences.Miniature;
 import pl.miniti.android.blooba.preferences.Miniature.Type;
@@ -159,8 +160,8 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("background_name", backgroundName);
-		editor.putInt("background_type", backgroundType);
+		editor.putString(Preferences.BACKGROUND_NAME, backgroundName);
+		editor.putInt(Preferences.BACKGROUND_TYPE, backgroundType);
 		editor.commit();
 	}
 

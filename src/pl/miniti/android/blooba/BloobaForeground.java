@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
+import pl.miniti.android.blooba.base.Preferences;
 import pl.miniti.android.blooba.preferences.ImageAdapter;
 import pl.miniti.android.blooba.preferences.Miniature;
 import pl.miniti.android.blooba.preferences.Miniature.Type;
@@ -211,8 +212,8 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("foreground_name", foregroundName);
-		editor.putInt("foreground_type", foregroundType);
+		editor.putString(Preferences.FOREGROUND_NAME, foregroundName);
+		editor.putInt(Preferences.FOREGROUND_TYPE, foregroundType);
 
 		editor.commit();
 	}

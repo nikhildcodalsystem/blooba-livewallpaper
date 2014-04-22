@@ -7,7 +7,6 @@
 
 package pl.miniti.android.blooba.base;
 
-
 /**
  * Stores constants and other statically loaded contents related to Blooba
  */
@@ -39,8 +38,18 @@ public final class Preferences {
 	public static final String FOREGROUND_NAME = "foreground_name";
 
 	/**
+	 * int key for describing the blooba foreground type
+	 */
+	public static final String FOREGROUND_TYPE = "foreground_type";
+
+	/**
 	 * string key for describing the blooba background
 	 */
 	public static final String BACKGROUND_NAME = "background_name";
+
+	/**
+	 * int key for describing the blooba background type
+	 */
+	public static final String BACKGROUND_TYPE = "background_type";
 
 }
