@@ -7,20 +7,27 @@
 
 package pl.miniti.android.blooba;
 
+import java.io.File;
+import java.io.IOException;
+
 import pl.miniti.android.blooba.preferences.ImageAdapter;
 import pl.miniti.android.blooba.preferences.Miniature;
 import pl.miniti.android.blooba.preferences.Miniature.Type;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.Toast;
 
 /**
  * Foreground selection activity
@@ -28,7 +35,12 @@ import android.widget.GridView;
 public class BloobaForeground extends Activity implements OnItemClickListener {
 
 	/**
-	 * Action code
+	 */
+
+	private static final String FOREGROUND_JPG = "foreground.jpg";
+
+	/**
+	 * Action code for selecting image
 	 */
 	private static final int PICK_IMAGE = 404;
 
@@ -76,11 +88,10 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 * @return bitmap identifier
 	 */
 	public static int resolveResource(String name) {
-		for (Miniature m : minis) {
-			if (name.equals(m.getPreferenceValue())) {
-				return m.getBitmapResource();
-			}
-		}
+		/*
+		 * for (Miniature m : minis) { if (name.equals(m.getPreferenceValue()))
+		 * { return m.getBitmapResource(); } }
+		 */
 
 		// assume 'earth' as default front
 		return R.drawable.earth;
@@ -114,20 +125,55 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 		Miniature mini = minis[position];
 
 		if (mini.getType() == Miniature.Type.GALLERY) {
+
+			deleteFile(FOREGROUND_JPG);
+			try {
+				getFileStreamPath(FOREGROUND_JPG).createNewFile();
+			} catch (IOException e) {
+				// display an error message
+				String errorMessage = "We're are facing a problem using the storage :/";
+				Toast toast = Toast.makeText(this, errorMessage,
+						Toast.LENGTH_SHORT);
+				toast.show();
+				return;
+			}
+
 			Intent intent = new Intent();
 			intent.setType("image/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);
-			startActivityForResult(
-					Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+			intent.putExtra("crop", "true");
+			intent.putExtra("aspectX", 1);
+			intent.putExtra("aspectY", 1);
+			intent.putExtra("outputX", 400);
+			intent.putExtra("outputY", 400);
+			intent.putExtra("scale", true);
+			intent.putExtra("noFaceDetection", true);
+			intent.putExtra("return-data", false);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT,
+					getFileStreamPath(FOREGROUND_JPG));
+			intent.putExtra("outputFormat",
+					Bitmap.CompressFormat.JPEG.toString());
+
+			try {
+				startActivityForResult(
+						Intent.createChooser(intent, "Select Picture"),
+						PICK_IMAGE);
+			} catch (ActivityNotFoundException anfe) {
+				// display an error message
+				String errorMessage = "Unfortunately your device doesn't support the crop action";
+				Toast toast = Toast.makeText(this, errorMessage,
+						Toast.LENGTH_SHORT);
+				toast.show();
+				return;
+			}
 			return;
 		} else {
 			storeForegroundPreference(mini.getPreferenceValue(), mini.getType()
-					.ordinal(), -1, -1, -1);
+					.ordinal());
 		}
 
 		super.finish();
 	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -136,23 +182,36 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+
+		if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
 			Uri _uri = data.getData();
 
-			Cursor cursor = getContentResolver()
-					.query(_uri,
-							new String[]{android.provider.MediaStore.Images.ImageColumns.DATA},
-							null, null, null);
-			cursor.moveToFirst();
+			File custom = getFileStreamPath(FOREGROUND_JPG);
+			if (custom.exists() && custom.length() > 0) {
 
-			// TODO crop to circle
-			storeForegroundPreference(cursor.getString(0),
-					Miniature.Type.GALLERY.ordinal(), -1, -1, -1);
-			cursor.close();
+				// TODO crop to circle?
+
+				// custom foreground
+				storeForegroundPreference(custom.getAbsolutePath(),
+						Miniature.Type.IMAGE.ordinal());
+
+			} else {
+
+				// standard gallery foreground
+				Cursor cursor = getContentResolver()
+						.query(_uri,
+								new String[]{android.provider.MediaStore.Images.ImageColumns.DATA},
+								null, null, null);
+				cursor.moveToFirst();
+
+				storeForegroundPreference(cursor.getColumnName(0),
+						Miniature.Type.IMAGE.ordinal());
+
+				cursor.close();
+			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-
 	/**
 	 * Helper method to store the selected value in user preferences
 	 * 
@@ -168,22 +227,13 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 *            blooba radius
 	 */
 	private void storeForegroundPreference(String foregroundName,
-			int foregroundType, int x, int y, int r) {
+			int foregroundType) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("foreground_name", foregroundName);
 		editor.putInt("foreground_type", foregroundType);
 
-		if (x > 0 && y > 0 && r > 0) {
-			// editor.putInt("foreground_x", x);
-			// editor.putInt("foreground_y", y);
-			// editor.putInt("foreground_r", r);
-		} else {
-			editor.remove("foreground_x");
-			editor.remove("foreground_y");
-			editor.remove("foreground_z");
-		}
 		editor.commit();
 	}
 
