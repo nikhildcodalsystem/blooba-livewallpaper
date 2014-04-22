@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.hardware.Sensor;
@@ -103,8 +102,6 @@ public class BloobaService extends WallpaperService {
 		@Override
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
-
-			// TODO reload when displayed
 
 			String currentBackground = bloobaPreferences.getBackground();
 
@@ -298,17 +295,13 @@ public class BloobaService extends WallpaperService {
 			switch (fType) {
 				case REFLECTION :
 					return new ReflectionForegroundProvider(
-
-					BitmapFactory.decodeResource(getResources(),
-							BloobaForeground.resolveResource(bloobaPreferences
-									.getForeground())), this.background.get());
+							BloobaForeground.getFrontBitmap(bloobaPreferences,
+									getResources()), this.background.get());
 				case IMAGE :
 				default :
 					return new ImageForegroundProvider(
-							BitmapFactory.decodeResource(getResources(),
-									BloobaForeground
-											.resolveResource(bloobaPreferences
-													.getForeground())));
+							BloobaForeground.getFrontBitmap(bloobaPreferences,
+									getResources()));
 			}
 		}
 

@@ -252,6 +252,7 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 
 		return ref;
 	}
+
 	public static void free(String name) {
 		int count = counts.remove(name);
 

@@ -142,10 +142,18 @@ public class BloobaPreferencesWrapper {
 		return backgroundType;
 	}
 
+	/**
+	 * @return true if the background bitmap is a custom gallery image. false
+	 *         otherwise
+	 */
 	public boolean isBackgroundUserDefined() {
 		return this.backgroundType == Miniature.Type.GALLERY.ordinal();
 	}
 
+	/**
+	 * @return true if the foreground bitmap is a custom gallery image. false
+	 *         otherwise
+	 */
 	public boolean isForegroundUserDefined() {
 		return this.foregroundType == Miniature.Type.GALLERY.ordinal();
 	}

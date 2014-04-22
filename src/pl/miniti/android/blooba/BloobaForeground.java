@@ -10,6 +10,7 @@ package pl.miniti.android.blooba;
 import java.io.File;
 import java.io.IOException;
 
+import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
 import pl.miniti.android.blooba.preferences.ImageAdapter;
 import pl.miniti.android.blooba.preferences.Miniature;
 import pl.miniti.android.blooba.preferences.Miniature.Type;
@@ -17,9 +18,9 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -88,10 +89,12 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 * @return bitmap identifier
 	 */
 	public static int resolveResource(String name) {
-		/*
-		 * for (Miniature m : minis) { if (name.equals(m.getPreferenceValue()))
-		 * { return m.getBitmapResource(); } }
-		 */
+
+		for (Miniature m : minis) {
+			if (name.equals(m.getPreferenceValue())) {
+				return m.getBitmapResource();
+			}
+		}
 
 		// assume 'earth' as default front
 		return R.drawable.earth;
@@ -174,6 +177,7 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 
 		super.finish();
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -184,34 +188,16 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-			Uri _uri = data.getData();
 
+			// custom foreground
 			File custom = getFileStreamPath(FOREGROUND_JPG);
-			if (custom.exists() && custom.length() > 0) {
+			storeForegroundPreference(custom.getAbsolutePath(),
+					Miniature.Type.GALLERY.ordinal());
 
-				// TODO crop to circle?
-
-				// custom foreground
-				storeForegroundPreference(custom.getAbsolutePath(),
-						Miniature.Type.IMAGE.ordinal());
-
-			} else {
-
-				// standard gallery foreground
-				Cursor cursor = getContentResolver()
-						.query(_uri,
-								new String[]{android.provider.MediaStore.Images.ImageColumns.DATA},
-								null, null, null);
-				cursor.moveToFirst();
-
-				storeForegroundPreference(cursor.getColumnName(0),
-						Miniature.Type.IMAGE.ordinal());
-
-				cursor.close();
-			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+
 	/**
 	 * Helper method to store the selected value in user preferences
 	 * 
@@ -219,12 +205,6 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 *            foreground resource value
 	 * @param foregroundType
 	 *            type of the resource
-	 * @param x
-	 *            x-axis blooba center
-	 * @param y
-	 *            y-axis blooba center
-	 * @param r
-	 *            blooba radius
 	 */
 	private void storeForegroundPreference(String foregroundName,
 			int foregroundType) {
@@ -237,4 +217,13 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 		editor.commit();
 	}
 
+	public static final Bitmap getFrontBitmap(BloobaPreferencesWrapper prefs,
+			Resources resources) {
+		if (prefs.isForegroundUserDefined()) {
+			return BitmapFactory.decodeFile(prefs.getForeground());
+		} else {
+			return BitmapFactory.decodeResource(resources,
+					BloobaForeground.resolveResource(prefs.getForeground()));
+		}
+	}
 }
