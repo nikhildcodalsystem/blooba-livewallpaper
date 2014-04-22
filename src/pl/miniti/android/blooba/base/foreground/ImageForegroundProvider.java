@@ -6,33 +6,83 @@
  */
 package pl.miniti.android.blooba.base.foreground;
 
+import java.lang.ref.SoftReference;
+
 import android.graphics.Bitmap;
 
 /**
+ * Foreground provider which displays a given static bitmap
  */
 public class ImageForegroundProvider implements ForegroundProvider {
 
+	/**
+	 * Bitmap texture returned on each request
+	 */
 	private Bitmap texture;
 
+	/**
+	 * Constructor based on a given bitmap texture
+	 * 
+	 * @param texture
+	 *            bitmap texture
+	 */
 	public ImageForegroundProvider(Bitmap texture) {
 		this.texture = texture;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#isDynamic()
+	 */
 	@Override
 	public boolean isDynamic() {
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#initForSize
+	 * (int)
+	 */
 	@Override
 	public void initForSize(int size) {
 		texture = Bitmap.createScaledBitmap(texture, size, size, false);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#getTexture
+	 * (float, float, int)
+	 */
 	@Override
 	public Bitmap getTexture(float x, float y, int rad) {
 		return texture;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#setBackground
+	 * (java.lang.ref.SoftReference)
+	 */
+	@Override
+	public void setBackground(SoftReference<Bitmap> background) {
+		// do nothing
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#destroy()
+	 */
 	@Override
 	public void destroy() {
 		texture.recycle();

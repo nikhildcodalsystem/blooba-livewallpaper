@@ -11,7 +11,10 @@ import pl.miniti.android.blooba.preferences.ImageAdapter;
 import pl.miniti.android.blooba.preferences.Miniature;
 import pl.miniti.android.blooba.preferences.Miniature.Type;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -23,7 +26,9 @@ import android.widget.GridView;
  */
 public class BloobaForeground extends Activity implements OnItemClickListener {
 
-	private final Miniature[] minis = new Miniature[]{
+	private static final int PICK_IMAGE = 404;
+
+	public final static Miniature[] minis = new Miniature[]{
 			new Miniature(R.drawable.earth_xs, R.string.f_earth, "earth",
 					Type.IMAGE),
 			new Miniature(R.drawable.moon_xs, R.string.f_moon, "moon",
@@ -51,8 +56,15 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 			new Miniature(R.drawable.penny_xs, R.string.f_penny, "penny",
 					Type.IMAGE),
 			new Miniature(R.drawable.spider_xs, R.string.f_spider, "spider",
-					Type.IMAGE)};
+					Type.IMAGE),
+			new Miniature(R.drawable.gallery_xs, R.string.own, null,
+					Type.GALLERY)};
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,17 +75,70 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 		gridView.setAdapter(new ImageAdapter(this, minis));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget
+	 * .AdapterView, android.view.View, int, long)
+	 */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Miniature mini = minis[position];
+
+		if (mini.getType() == Miniature.Type.GALLERY) {
+			Intent intent = new Intent();
+			intent.setType("image/*");
+			intent.setAction(Intent.ACTION_GET_CONTENT);
+			startActivityForResult(
+					Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+			return;
+		} else {
+			storeForegroundPreference(mini.getPreferenceValue(), mini.getType()
+					.ordinal());
+		}
+
+		super.finish();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onActivityResult(int, int,
+	 * android.content.Intent)
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+			Uri _uri = data.getData();
+
+			Cursor cursor = getContentResolver()
+					.query(_uri,
+							new String[]{android.provider.MediaStore.Images.ImageColumns.DATA},
+							null, null, null);
+			cursor.moveToFirst();
+
+			// TODO crop to circle
+			storeForegroundPreference(cursor.getString(0),
+					Miniature.Type.GALLERY.ordinal());
+			cursor.close();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	/**
+	 * @param backgroundName
+	 * @param backgroundType
+	 */
+	private void storeForegroundPreference(String backgroundName,
+			int backgroundType) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("foreground_name", mini.getResource());
-		editor.putInt("foreground_type", mini.getType().ordinal());
+		editor.putString("foreground_name", backgroundName);
+		editor.putInt("foreground_type", backgroundType);
 		editor.commit();
-		super.finish();
 	}
 
 }

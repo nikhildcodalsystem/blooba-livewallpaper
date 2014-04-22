@@ -6,6 +6,8 @@
  */
 package pl.miniti.android.blooba.base.foreground;
 
+import java.lang.ref.SoftReference;
+
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -15,31 +17,79 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 
 /**
+ * Foreground provider which reclects the background of the blooba in its
+ * foreground
  */
 public class ReflectionForegroundProvider implements ForegroundProvider {
 
-	private Bitmap front;
-	private Bitmap background;
+	/**
+	 * Bitmap resource for the front of the blooba
+	 */
+	private SoftReference<Bitmap> front;
 
-	public ReflectionForegroundProvider(Bitmap front, Bitmap back) {
+	/**
+	 * Reference to the blooba background bitmap
+	 */
+	private SoftReference<Bitmap> background;
+
+	/**
+	 * Contructor with front and back bitmap resources
+	 * 
+	 * @param front
+	 *            front bitmap
+	 * @param back
+	 *            background bitmap
+	 */
+	public ReflectionForegroundProvider(SoftReference<Bitmap> front,
+			SoftReference<Bitmap> back) {
 		this.front = front;
 		this.background = back;
 	}
 
-	public void setBackground(Bitmap back) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#setBackground
+	 * (java.lang.ref.SoftReference)
+	 */
+	@Override
+	public void setBackground(SoftReference<Bitmap> back) {
 		background = back;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#isDynamic()
+	 */
 	@Override
 	public boolean isDynamic() {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#initForSize
+	 * (int)
+	 */
 	@Override
 	public void initForSize(int size) {
-		front = Bitmap.createScaledBitmap(front, size, size, false);
+		// TODO to be improved
+		front = new SoftReference<Bitmap>(Bitmap.createScaledBitmap(
+				front.get(), size, size, false));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#getTexture
+	 * (float, float, int)
+	 */
 	@Override
 	public Bitmap getTexture(float x, float y, int size) {
 		Bitmap texture = Bitmap.createBitmap(size, size, Config.ARGB_8888);
@@ -56,8 +106,8 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 			fxl = 0;
 		}
 		float fxr = fxl + size / 2;
-		if (fxr > background.getWidth()) {
-			fxr = background.getWidth() - 1;
+		if (fxr > background.get().getWidth()) {
+			fxr = background.get().getWidth() - 1;
 			fxl = fxr - size / 2;
 		}
 
@@ -66,20 +116,29 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 			fyt = 0;
 		}
 		float fyb = fyt + size / 2;
-		if (fyt > background.getHeight()) {
-			fyt = background.getHeight() - 1;
+		if (fyt > background.get().getHeight()) {
+			fyt = background.get().getHeight() - 1;
 			fyb = fyt - size / 2;
 		}
 
-		c.drawBitmap(background, new Rect((int) fxl, (int) fyt, (int) fxr,
-				(int) fyb), new Rect(0, 0, size, size), paint);
+		c.drawBitmap(background.get(), new Rect((int) fxl, (int) fyt,
+				(int) fxr, (int) fyb), new Rect(0, 0, size, size), paint);
 
-		c.drawBitmap(front, 0, 0, null);
+		c.drawBitmap(front.get(), 0, 0, null);
 		return texture;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#destroy()
+	 */
 	@Override
 	public void destroy() {
-		front.recycle();
+		front.get().recycle();
+		front = null;
+		background = null;
 	}
 
 }

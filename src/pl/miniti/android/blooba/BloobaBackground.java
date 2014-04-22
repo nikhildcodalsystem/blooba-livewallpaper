@@ -28,7 +28,7 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 
 	private static final int PICK_IMAGE = 304;
 
-	private final Miniature[] minis = new Miniature[]{
+	public final static Miniature[] minis = new Miniature[]{
 			new Miniature(R.drawable.bg_stars_xs, R.string.b_stars, "stars",
 					Type.IMAGE),
 			new Miniature(R.drawable.bg_boards_xs, R.string.b_boards, "boards",
@@ -42,6 +42,11 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 			new Miniature(R.drawable.gallery_xs, R.string.own, null,
 					Type.GALLERY)};
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,6 +57,13 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 		gridView.setAdapter(new ImageAdapter(this, minis));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget
+	 * .AdapterView, android.view.View, int, long)
+	 */
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -65,13 +77,19 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 					Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
 			return;
 		} else {
-			storeBackgroundPreference(mini.getResource(), mini.getType()
+			storeBackgroundPreference(mini.getPreferenceValue(), mini.getType()
 					.ordinal());
 		}
 
 		super.finish();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onActivityResult(int, int,
+	 * android.content.Intent)
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
@@ -89,6 +107,10 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	/**
+	 * @param backgroundName
+	 * @param backgroundType
+	 */
 	private void storeBackgroundPreference(String backgroundName,
 			int backgroundType) {
 		SharedPreferences prefs = PreferenceManager

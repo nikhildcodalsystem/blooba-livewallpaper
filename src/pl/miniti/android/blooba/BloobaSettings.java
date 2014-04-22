@@ -21,7 +21,7 @@ public class BloobaSettings extends PreferenceActivity {
 	 *            context
 	 */
 	@Override
-	@SuppressWarnings("all")
+	@SuppressWarnings("deprecation")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.blooba_settings);

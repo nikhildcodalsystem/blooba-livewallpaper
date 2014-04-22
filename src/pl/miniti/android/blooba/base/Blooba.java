@@ -382,7 +382,7 @@ public class Blooba {
 		return fProvider;
 	}
 
-	public void setfProvider(ForegroundProvider fProvider) {
+	public void setForegroundProvider(ForegroundProvider fProvider) {
 		if (this.fProvider != null) {
 			this.fProvider.destroy();
 		}
