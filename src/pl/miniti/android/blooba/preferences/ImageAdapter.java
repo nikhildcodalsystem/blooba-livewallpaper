@@ -15,32 +15,69 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
+ * Adapter for the miniatures in the Grid View
  */
 public class ImageAdapter extends BaseAdapter {
+
+	/**
+	 * Android context
+	 */
 	private Context mContext;
 
+	/**
+	 * Array of miniatures
+	 */
 	private Miniature[] thumbs;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param c
+	 *            android context
+	 * @param thumbs
+	 *            array of miniatures
+	 */
 	public ImageAdapter(Context c, Miniature[] thumbs) {
 		mContext = c;
 		this.thumbs = thumbs;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.widget.Adapter#getCount()
+	 */
 	@Override
 	public int getCount() {
 		return thumbs.length;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.widget.Adapter#getItem(int)
+	 */
 	@Override
 	public Object getItem(int position) {
 		return thumbs[position];
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.widget.Adapter#getItemId(int)
+	 */
 	@Override
 	public long getItemId(int position) {
 		return 0;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.widget.Adapter#getView(int, android.view.View,
+	 * android.view.ViewGroup)
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		RelativeLayout layout = new RelativeLayout(mContext);

@@ -21,26 +21,32 @@ import pl.miniti.android.blooba.preferences.Miniature;
 public final class Preferences {
 
 	/**
+	 * boolean key for enabling touch screen sensor
 	 */
 	public static final String ENABLE_TOUCH = "touch";
 
 	/**
+	 * boolean key for inverting the gravity direction
 	 */
 	public static final String INVERT_GRAVITY = "invert";
 
 	/**
+	 * integer key for defining blooba squishiness
 	 */
 	public static final String RELAX_FACTOR = "relax";
 
 	/**
+	 * integer key for defining animation speed
 	 */
 	public static final String SPEED = "speed";
 
 	/**
+	 * string key for describing the blooba foreground
 	 */
 	public static final String FOREGROUND_NAME = "foreground_name";
 
 	/**
+	 * string key for describing the blooba background
 	 */
 	public static final String BACKGROUND_NAME = "background_name";
 

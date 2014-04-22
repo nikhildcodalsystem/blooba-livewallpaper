@@ -23,11 +23,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 /**
+ * Foreground selection activity
  */
 public class BloobaForeground extends Activity implements OnItemClickListener {
 
+	/**
+	 * Action code
+	 */
 	private static final int PICK_IMAGE = 404;
 
+	/**
+	 * Statically defined array of available foregrounds
+	 */
 	public final static Miniature[] minis = new Miniature[]{
 			new Miniature(R.drawable.earth_xs, R.string.f_earth, "earth",
 					Type.IMAGE),
@@ -128,16 +135,20 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	}
 
 	/**
-	 * @param backgroundName
-	 * @param backgroundType
+	 * Helper method to store the selected value in user preferences
+	 * 
+	 * @param foregroundName
+	 *            foreground resource value
+	 * @param foregroundType
+	 *            type of the resource
 	 */
-	private void storeForegroundPreference(String backgroundName,
-			int backgroundType) {
+	private void storeForegroundPreference(String foregroundName,
+			int foregroundType) {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("foreground_name", backgroundName);
-		editor.putInt("foreground_type", backgroundType);
+		editor.putString("foreground_name", foregroundName);
+		editor.putInt("foreground_type", foregroundType);
 		editor.commit();
 	}
 

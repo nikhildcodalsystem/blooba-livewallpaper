@@ -23,11 +23,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 /**
+ * Background selection activity
  */
 public class BloobaBackground extends Activity implements OnItemClickListener {
 
+	/**
+	 * Action code
+	 */
 	private static final int PICK_IMAGE = 304;
 
+	/**
+	 * Statically defined array of available backgrounds
+	 */
 	public final static Miniature[] minis = new Miniature[]{
 			new Miniature(R.drawable.bg_stars_xs, R.string.b_stars, "stars",
 					Type.IMAGE),
@@ -108,8 +115,12 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 	}
 
 	/**
+	 * Helper method to store the selected value in user preferences
+	 * 
 	 * @param backgroundName
+	 *            background resource value
 	 * @param backgroundType
+	 *            type of the resource
 	 */
 	private void storeBackgroundPreference(String backgroundName,
 			int backgroundType) {
