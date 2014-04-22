@@ -165,6 +165,19 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 		editor.commit();
 	}
 
+	/**
+	 * Load bitmap, either a new one or from cache
+	 * 
+	 * @param resources
+	 *            app resources
+	 * @param prefs
+	 *            blooba preferences
+	 * @param width
+	 *            width of the screen
+	 * @param height
+	 *            height of the screen
+	 * @return reference to the background bitmap
+	 */
 	public static final SoftReference<Bitmap> getBitmap(Resources resources,
 			BloobaPreferencesWrapper prefs, int width, int height) {
 
@@ -254,6 +267,12 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 		return ref;
 	}
 
+	/**
+	 * Possibly release a reference to a background bitmap
+	 * 
+	 * @param name
+	 *            name of the background resource
+	 */
 	public static void free(String name) {
 		int count = counts.remove(name);
 

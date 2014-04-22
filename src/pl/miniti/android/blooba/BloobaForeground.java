@@ -37,8 +37,8 @@ import android.widget.Toast;
 public class BloobaForeground extends Activity implements OnItemClickListener {
 
 	/**
+	 * File name for the custom user-selected foreground image
 	 */
-
 	private static final String FOREGROUND_JPG = "foreground.jpg";
 
 	/**
@@ -218,6 +218,15 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 		editor.commit();
 	}
 
+	/**
+	 * Load the foreground bitmap based on user preferences
+	 * 
+	 * @param prefs
+	 *            blooba preferences
+	 * @param resources
+	 *            app resources
+	 * @return bitmap resource for the blooba foreground
+	 */
 	public static final Bitmap getFrontBitmap(BloobaPreferencesWrapper prefs,
 			Resources resources) {
 		if (prefs.isForegroundUserDefined()) {
