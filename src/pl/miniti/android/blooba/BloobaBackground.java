@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -228,21 +229,29 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 
 		options.inSampleSize = inSampleSize;
 
-		SoftReference<Bitmap> ref = null;
+		Bitmap bitmap = null;
 		if (prefs.isBackgroundUserDefined()) {
-			ref = new SoftReference<Bitmap>(BitmapFactory.decodeFile(name,
-					options));
+			bitmap = BitmapFactory.decodeFile(name, options);
 		} else {
-			ref = new SoftReference<Bitmap>(BitmapFactory.decodeResource(
-					resources, resource, options));
+			bitmap = BitmapFactory.decodeResource(resources, resource, options);
 		}
 
+		if (rotate) {
+			Bitmap old = bitmap;
+			Matrix matrix = new Matrix();
+			matrix.setRotate(-90f, bitmap.getWidth() / 2,
+					bitmap.getHeight() / 2);
+			bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+					bitmap.getHeight(), matrix, false);
+			old.recycle();
+		}
+
+		SoftReference<Bitmap> ref = new SoftReference<Bitmap>(bitmap);
 		cache.put(name, ref);
 		counts.put(name, 1);
 
 		return ref;
 	}
-
 	public static void free(String name) {
 		int count = counts.remove(name);
 

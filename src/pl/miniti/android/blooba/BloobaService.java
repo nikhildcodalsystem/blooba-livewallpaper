@@ -21,6 +21,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -231,8 +232,14 @@ public class BloobaService extends WallpaperService {
 			Canvas canvas = null;
 			try {
 				canvas = holder.lockCanvas();
-				if (canvas != null && blooba != null) {
-					canvas.drawBitmap(background.get(), 0f, 0f, null);
+				if (canvas != null && blooba != null
+						&& background.get() != null) {
+
+					Bitmap bitmap = background.get();
+					canvas.drawBitmap(bitmap, new Rect(0, 0, bitmap.getWidth(),
+							bitmap.getHeight()), new Rect(0, 0, width, height),
+							null);
+
 					blooba.requestAnimationFrame(canvas);
 				}
 			} finally {
@@ -244,7 +251,6 @@ public class BloobaService extends WallpaperService {
 				handler.postDelayed(drawRunner, 41);
 			}
 		}
-
 		/**
 		 *  
 		 */
