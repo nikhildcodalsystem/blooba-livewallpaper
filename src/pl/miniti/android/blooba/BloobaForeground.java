@@ -36,36 +36,55 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 * Statically defined array of available foregrounds
 	 */
 	public final static Miniature[] minis = new Miniature[]{
-			new Miniature(R.drawable.earth_xs, R.string.f_earth, "earth",
+			new Miniature(R.drawable.earth_xs, R.drawable.earth,
+					R.string.f_earth, "earth", Type.IMAGE),
+			new Miniature(R.drawable.moon_xs, R.drawable.moon, R.string.f_moon,
+					"moon", Type.IMAGE),
+			new Miniature(R.drawable.kenny_xs, R.drawable.kenny,
+					R.string.f_kenny, "kenny", Type.IMAGE),
+			new Miniature(R.drawable.squish_xs, R.drawable.squish,
+					R.string.f_squishy, "squish", Type.IMAGE),
+			new Miniature(R.drawable.bubble_xs, R.drawable.bubble,
+					R.string.f_bubble, "bubble", Type.IMAGE),
+			new Miniature(R.drawable.water_xs, R.drawable.bubble,
+					R.string.f_water, "bubble", Type.REFLECTION),
+			new Miniature(R.drawable.basketball_xs, R.drawable.basketball,
+					R.string.f_basketball, "basketball", Type.IMAGE),
+			new Miniature(R.drawable.nemo_xs, R.drawable.nemo, R.string.f_nemo,
+					"nemo", Type.IMAGE),
+			new Miniature(R.drawable.america_xs, R.drawable.america,
+					R.string.f_america, "america", Type.IMAGE),
+			new Miniature(R.drawable.balloon_pink_xs, R.drawable.balloon_pink,
+					R.string.f_bpink, "bpink", Type.IMAGE),
+			new Miniature(R.drawable.balloon_black_xs,
+					R.drawable.balloon_black, R.string.f_bblack, "bblack",
 					Type.IMAGE),
-			new Miniature(R.drawable.moon_xs, R.string.f_moon, "moon",
-					Type.IMAGE),
-			new Miniature(R.drawable.kenny_xs, R.string.f_kenny, "kenny",
-					Type.IMAGE),
-			new Miniature(R.drawable.squish_xs, R.string.f_squishy, "squish",
-					Type.IMAGE),
-			new Miniature(R.drawable.bubble_xs, R.string.f_bubble, "bubble",
-					Type.IMAGE),
-			new Miniature(R.drawable.water_xs, R.string.f_water, "bubble",
-					Type.REFLECTION),
-			new Miniature(R.drawable.basketball_xs, R.string.f_basketball,
-					"basketball", Type.IMAGE),
-			new Miniature(R.drawable.nemo_xs, R.string.f_nemo, "nemo",
-					Type.IMAGE),
-			new Miniature(R.drawable.america_xs, R.string.f_america, "america",
-					Type.IMAGE),
-			new Miniature(R.drawable.balloon_pink_xs, R.string.f_bpink,
-					"bpink", Type.IMAGE),
-			new Miniature(R.drawable.balloon_black_xs, R.string.f_bblack,
-					"bblack", Type.IMAGE),
-			new Miniature(R.drawable.donut_xs, R.string.f_donut, "donut",
-					Type.IMAGE),
-			new Miniature(R.drawable.penny_xs, R.string.f_penny, "penny",
-					Type.IMAGE),
-			new Miniature(R.drawable.spider_xs, R.string.f_spider, "spider",
-					Type.IMAGE),
-			new Miniature(R.drawable.gallery_xs, R.string.own, null,
+			new Miniature(R.drawable.donut_xs, R.drawable.donut,
+					R.string.f_donut, "donut", Type.IMAGE),
+			new Miniature(R.drawable.penny_xs, R.drawable.penny,
+					R.string.f_penny, "penny", Type.IMAGE),
+			new Miniature(R.drawable.spider_xs, R.drawable.spider,
+					R.string.f_spider, "spider", Type.IMAGE),
+			new Miniature(R.drawable.gallery_xs, 0, R.string.own, null,
 					Type.GALLERY)};
+
+	/**
+	 * Resolve foreground resource property with default if not found
+	 * 
+	 * @param name
+	 *            name of the resource
+	 * @return bitmap identifier
+	 */
+	public static int resolveResource(String name) {
+		for (Miniature m : minis) {
+			if (name.equals(m.getPreferenceValue())) {
+				return m.getBitmapResource();
+			}
+		}
+
+		// assume 'earth' as default front
+		return R.drawable.earth;
+	}
 
 	/*
 	 * (non-Javadoc)

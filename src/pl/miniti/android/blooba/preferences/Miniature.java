@@ -44,6 +44,11 @@ public class Miniature {
 	private String preference;
 
 	/**
+	 * Miniature description string resource
+	 */
+	private int description;
+
+	/**
 	 * Bitmap id of the actual drawable resource if applicable
 	 */
 	private int resource;
@@ -60,16 +65,20 @@ public class Miniature {
 	 *            bitmap resource for the miniature
 	 * @param resource
 	 *            actual bitmap resource
+	 * @param description
+	 *            item description resource
 	 * @param preference
 	 *            value for the preferences object
 	 * @param type
 	 *            type of resource
 	 */
-	public Miniature(int miniature, int resource, String preference, Type type) {
+	public Miniature(int miniature, int resource, int description,
+			String preference, Type type) {
 		super();
 		this.miniatureResource = miniature;
 		this.preference = preference;
 		this.resource = resource;
+		this.description = description;
 		this.type = type;
 	}
 
@@ -99,6 +108,13 @@ public class Miniature {
 	 */
 	public Type getType() {
 		return type;
+	}
+
+	/**
+	 * @return id of the string resource for miniature description
+	 */
+	public int getDescriptionResource() {
+		return description;
 	}
 
 }

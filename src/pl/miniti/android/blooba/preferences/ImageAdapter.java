@@ -99,7 +99,7 @@ public class ImageAdapter extends BaseAdapter {
 		lpt.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
 		TextView textView = new TextView(mContext);
-		textView.setText(thumbs[position].getBitmapResource());
+		textView.setText(thumbs[position].getDescriptionResource());
 
 		layout.addView(imageView, lpi);
 		layout.addView(textView, lpt);

@@ -6,8 +6,6 @@
  */
 package pl.miniti.android.blooba.base.foreground;
 
-import java.lang.ref.SoftReference;
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -25,12 +23,12 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 	/**
 	 * Bitmap resource for the front of the blooba
 	 */
-	private SoftReference<Bitmap> front;
+	private Bitmap front;
 
 	/**
 	 * Reference to the blooba background bitmap
 	 */
-	private SoftReference<Bitmap> background;
+	private Bitmap background;
 
 	/**
 	 * Contructor with front and back bitmap resources
@@ -40,8 +38,7 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 	 * @param back
 	 *            background bitmap
 	 */
-	public ReflectionForegroundProvider(SoftReference<Bitmap> front,
-			SoftReference<Bitmap> back) {
+	public ReflectionForegroundProvider(Bitmap front, Bitmap back) {
 		this.front = front;
 		this.background = back;
 	}
@@ -51,10 +48,10 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 	 * 
 	 * @see
 	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#setBackground
-	 * (java.lang.ref.SoftReference)
+	 * (android.graphics.Bitmap)
 	 */
 	@Override
-	public void setBackground(SoftReference<Bitmap> back) {
+	public void setBackground(Bitmap back) {
 		background = back;
 	}
 
@@ -79,8 +76,7 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 	@Override
 	public void initForSize(int size) {
 		// TODO to be improved
-		front = new SoftReference<Bitmap>(Bitmap.createScaledBitmap(
-				front.get(), size, size, false));
+		front = Bitmap.createScaledBitmap(front, size, size, false);
 	}
 
 	/*
@@ -106,8 +102,8 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 			fxl = 0;
 		}
 		float fxr = fxl + size / 2;
-		if (fxr > background.get().getWidth()) {
-			fxr = background.get().getWidth() - 1;
+		if (fxr > background.getWidth()) {
+			fxr = background.getWidth() - 1;
 			fxl = fxr - size / 2;
 		}
 
@@ -116,15 +112,15 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 			fyt = 0;
 		}
 		float fyb = fyt + size / 2;
-		if (fyt > background.get().getHeight()) {
-			fyt = background.get().getHeight() - 1;
+		if (fyt > background.getHeight()) {
+			fyt = background.getHeight() - 1;
 			fyb = fyt - size / 2;
 		}
 
-		c.drawBitmap(background.get(), new Rect((int) fxl, (int) fyt,
-				(int) fxr, (int) fyb), new Rect(0, 0, size, size), paint);
+		c.drawBitmap(background, new Rect((int) fxl, (int) fyt, (int) fxr,
+				(int) fyb), new Rect(0, 0, size, size), paint);
 
-		c.drawBitmap(front.get(), 0, 0, null);
+		c.drawBitmap(front, 0, 0, null);
 		return texture;
 	}
 
@@ -136,7 +132,7 @@ public class ReflectionForegroundProvider implements ForegroundProvider {
 	 */
 	@Override
 	public void destroy() {
-		front.get().recycle();
+		front.recycle();
 		front = null;
 		background = null;
 	}

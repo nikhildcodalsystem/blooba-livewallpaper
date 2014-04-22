@@ -36,18 +36,37 @@ public class BloobaBackground extends Activity implements OnItemClickListener {
 	 * Statically defined array of available backgrounds
 	 */
 	public final static Miniature[] minis = new Miniature[]{
-			new Miniature(R.drawable.bg_stars_xs, R.string.b_stars, "stars",
-					Type.IMAGE),
-			new Miniature(R.drawable.bg_boards_xs, R.string.b_boards, "boards",
-					Type.IMAGE),
-			new Miniature(R.drawable.bg_green_xs, R.string.b_green, "green",
-					Type.IMAGE),
-			new Miniature(R.drawable.bg_beach_xs, R.string.b_beach, "beach",
-					Type.IMAGE),
-			new Miniature(R.drawable.bg_underwater_xs, R.string.b_underwater,
+			new Miniature(R.drawable.bg_stars_xs, R.drawable.bg_stars,
+					R.string.b_stars, "stars", Type.IMAGE),
+			new Miniature(R.drawable.bg_boards_xs, R.drawable.bg_boards,
+					R.string.b_boards, "boards", Type.IMAGE),
+			new Miniature(R.drawable.bg_green_xs, R.drawable.bg_green,
+					R.string.b_green, "green", Type.IMAGE),
+			new Miniature(R.drawable.bg_beach_xs, R.drawable.bg_beach,
+					R.string.b_beach, "beach", Type.IMAGE),
+			new Miniature(R.drawable.bg_underwater_xs,
+					R.drawable.bg_underwater, R.string.b_underwater,
 					"underwater", Type.IMAGE),
-			new Miniature(R.drawable.gallery_xs, R.string.own, null,
+			new Miniature(R.drawable.gallery_xs, 0, R.string.own, null,
 					Type.GALLERY)};
+
+	/**
+	 * Resolve background resource property with default if not found
+	 * 
+	 * @param name
+	 *            name of the resource
+	 * @return bitmap identifier
+	 */
+	public static int resolveResource(String name) {
+		for (Miniature m : minis) {
+			if (name.equals(m.getPreferenceValue())) {
+				return m.getBitmapResource();
+			}
+		}
+
+		// assume 'stars' as default background
+		return R.drawable.bg_stars;
+	}
 
 	/*
 	 * (non-Javadoc)

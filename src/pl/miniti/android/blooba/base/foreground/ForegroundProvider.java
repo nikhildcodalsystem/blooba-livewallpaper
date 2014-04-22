@@ -6,8 +6,6 @@
  */
 package pl.miniti.android.blooba.base.foreground;
 
-import java.lang.ref.SoftReference;
-
 import android.graphics.Bitmap;
 
 /**
@@ -50,7 +48,7 @@ public interface ForegroundProvider {
 	 * @param background
 	 *            new blooba background
 	 */
-	void setBackground(SoftReference<Bitmap> background);
+	void setBackground(Bitmap background);
 
 	/**
 	 * Called on destroying the blooba

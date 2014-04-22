@@ -62,84 +62,84 @@ public class BloobaPreferencesWrapper {
 		return settings;
 	}
 
+	/**
+	 * @return the touchEnabled
+	 */
+
 	public boolean isTouchEnabled() {
 		return touchEnabled;
 	}
+
+	/**
+	 * @return the gravityInverted
+	 */
 
 	public boolean isGravityInverted() {
 		return gravityInverted;
 	}
 
+	/**
+	 * @return the quality
+	 */
+
 	public int getQuality() {
 		return quality;
 	}
 
-	public float getSize() {
-		return size;
-	}
-
-	public float getRelaxFactor() {
-		return relaxFactor;
-	}
-
-	public void setTouchEnabled(boolean touchEnabled) {
-		this.touchEnabled = touchEnabled;
-	}
-
-	public void setGravityInverted(boolean gravityInverted) {
-		this.gravityInverted = gravityInverted;
-	}
-
-	public void setQuality(int quality) {
-		this.quality = quality;
-	}
-
-	public void setSize(float size) {
-		this.size = size;
-	}
-
-	public void setRelaxFactor(float relaxFactor) {
-		this.relaxFactor = relaxFactor;
-	}
+	/**
+	 * @return the speed
+	 */
 
 	public int getSpeed() {
 		return speed;
 	}
 
-	public void setSpeed(int speed) {
-		this.speed = speed;
+	/**
+	 * @return the size
+	 */
+
+	public float getSize() {
+		return size;
 	}
+
+	/**
+	 * @return the relaxFactor
+	 */
+
+	public float getRelaxFactor() {
+		return relaxFactor;
+	}
+
+	/**
+	 * @return the foreground
+	 */
 
 	public String getForeground() {
 		return foreground;
 	}
 
-	public void setForeground(String foreground) {
-		this.foreground = foreground;
-	}
+	/**
+	 * @return the foregroundType
+	 */
 
 	public int getForegroundType() {
 		return foregroundType;
 	}
 
-	public void setForegroundType(int foregroundType) {
-		this.foregroundType = foregroundType;
-	}
+	/**
+	 * @return the background
+	 */
 
 	public String getBackground() {
 		return background;
 	}
 
-	public void setBackground(String background) {
-		this.background = background;
-	}
+	/**
+	 * @return the backgroundType
+	 */
 
 	public int getBackgroundType() {
 		return backgroundType;
-	}
-
-	public void setBackgroundType(int backgroundType) {
-		this.backgroundType = backgroundType;
 	}
 
 	public boolean isBackgroundUserDefined() {

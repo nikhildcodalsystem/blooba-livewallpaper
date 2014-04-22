@@ -6,8 +6,6 @@
  */
 package pl.miniti.android.blooba.base.foreground;
 
-import java.lang.ref.SoftReference;
-
 import android.graphics.Bitmap;
 
 /**
@@ -70,10 +68,10 @@ public class ImageForegroundProvider implements ForegroundProvider {
 	 * 
 	 * @see
 	 * pl.miniti.android.blooba.base.foreground.ForegroundProvider#setBackground
-	 * (java.lang.ref.SoftReference)
+	 * (android.graphics.Bitmap)
 	 */
 	@Override
-	public void setBackground(SoftReference<Bitmap> background) {
+	public void setBackground(Bitmap background) {
 		// do nothing
 	}
 

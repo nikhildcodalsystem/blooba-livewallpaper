@@ -6,8 +6,6 @@
  */
 package pl.miniti.android.blooba;
 
-import java.lang.ref.SoftReference;
-
 import pl.miniti.android.blooba.base.Blooba;
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
 import pl.miniti.android.blooba.base.Preferences;
@@ -74,7 +72,7 @@ public class BloobaService extends WallpaperService {
 		private Blooba blooba;
 		private BloobaPreferencesWrapper bloobaPreferences;
 		private boolean visible = true;
-		private SoftReference<Bitmap> background;
+		private Bitmap background;
 		private int width;
 		private int height;
 
@@ -113,7 +111,7 @@ public class BloobaService extends WallpaperService {
 			} else if (key.equals(Preferences.SPEED)) {
 				blooba.setSpeed(bloobaPreferences.getSpeed());
 			} else if (key.equals(Preferences.FOREGROUND_NAME)) {
-				blooba.setForegroundProvider(getProvider());
+				blooba.setForegroundProvider(getForegroundProvider());
 			} else if (key.equals(Preferences.BACKGROUND_NAME)) {
 				loadBackground();
 				blooba.getForegroundProvider().setBackground(background);
@@ -226,7 +224,7 @@ public class BloobaService extends WallpaperService {
 			try {
 				canvas = holder.lockCanvas();
 				if (canvas != null && blooba != null) {
-					canvas.drawBitmap(background.get(), 0f, 0f, null);
+					canvas.drawBitmap(background, 0f, 0f, null);
 					blooba.requestAnimationFrame(canvas);
 				}
 			} finally {
@@ -244,7 +242,7 @@ public class BloobaService extends WallpaperService {
 		 */
 		private void newBlooba() {
 			if (blooba != null) {
-				background.get().recycle();
+				background.recycle();
 				background = null;
 				blooba.destroy();
 				blooba = null;
@@ -264,7 +262,8 @@ public class BloobaService extends WallpaperService {
 
 			loadBackground();
 
-			blooba = new Blooba(getProvider(), width, height, bloobaPreferences);
+			blooba = new Blooba(getForegroundProvider(), width, height,
+					bloobaPreferences);
 
 		}
 
@@ -273,7 +272,7 @@ public class BloobaService extends WallpaperService {
 		 */
 		private void loadBackground() {
 			if (background != null) {
-				background.get().recycle();
+				background.recycle();
 			}
 
 			BitmapFactory.Options options = new BitmapFactory.Options();
@@ -300,8 +299,8 @@ public class BloobaService extends WallpaperService {
 		 * @param rotate
 		 * @return
 		 */
-		private SoftReference<Bitmap> loadBackgroundBitmap(int resource,
-				String fileName, BitmapFactory.Options io, boolean rotate) {
+		private Bitmap loadBackgroundBitmap(int resource, String fileName,
+				BitmapFactory.Options io, boolean rotate) {
 
 			BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -325,11 +324,10 @@ public class BloobaService extends WallpaperService {
 			options.inSampleSize = inSampleSize;
 
 			if (resource > -1) {
-				return new SoftReference<Bitmap>(BitmapFactory.decodeResource(
-						getResources(), resource, options));
+				return BitmapFactory.decodeResource(getResources(), resource,
+						options);
 			} else {
-				return new SoftReference<Bitmap>(BitmapFactory.decodeFile(
-						fileName, options));
+				return BitmapFactory.decodeFile(fileName, options);
 			}
 		}
 
@@ -344,7 +342,7 @@ public class BloobaService extends WallpaperService {
 			if (u) {
 				BitmapFactory.decodeFile(f, o);
 			} else {
-				r = Preferences.resolveBackgroundResource(f);
+				r = BloobaBackground.resolveResource(f);
 				BitmapFactory.decodeResource(getResources(), r, o);
 			}
 			return r;
@@ -353,31 +351,24 @@ public class BloobaService extends WallpaperService {
 		/**
 		 * @return
 		 */
-		private ForegroundProvider getProvider() {
-			ForegroundProvider fProvider = null;
+		private ForegroundProvider getForegroundProvider() {
 			Miniature.Type fType = Miniature.Type.values()[bloobaPreferences
 					.getForegroundType()];
 			switch (fType) {
 				case REFLECTION :
-					fProvider = new ReflectionForegroundProvider(
-							new SoftReference<Bitmap>(
-									BitmapFactory.decodeResource(
-											getResources(),
-											Preferences
-													.resolveForegroundResource(bloobaPreferences
-															.getForeground()))),
-							this.background);
-					break;
+					return new ReflectionForegroundProvider(
+
+					BitmapFactory.decodeResource(getResources(),
+							BloobaForeground.resolveResource(bloobaPreferences
+									.getForeground())), this.background);
 				case IMAGE :
 				default :
-					fProvider = new ImageForegroundProvider(
-							BitmapFactory.decodeResource(
-									getResources(),
-									Preferences
-											.resolveForegroundResource(bloobaPreferences
+					return new ImageForegroundProvider(
+							BitmapFactory.decodeResource(getResources(),
+									BloobaForeground
+											.resolveResource(bloobaPreferences
 													.getForeground())));
 			}
-			return fProvider;
 		}
 
 	}
