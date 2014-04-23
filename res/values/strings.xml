@@ -40,5 +40,6 @@
     <string name="f_penny">Penny</string>
     <string name="f_spider">Spider</string>
     <string name="own">From Gallery</string>
+    <string name="error_crop">Cannot access storage space</string>
 
 </resources>

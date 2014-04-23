@@ -8,6 +8,7 @@
 package pl.miniti.android.blooba;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
@@ -16,15 +17,19 @@ import pl.miniti.android.blooba.preferences.ImageAdapter;
 import pl.miniti.android.blooba.preferences.Miniature;
 import pl.miniti.android.blooba.preferences.Miniature.Type;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -45,6 +50,11 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 * Action code for selecting image
 	 */
 	private static final int PICK_IMAGE = 404;
+
+	/**
+	 * Action code for cropping an image
+	 */
+	private static final int CROP_IMAGE = 405;
 
 	/**
 	 * Statically defined array of available foregrounds
@@ -130,47 +140,17 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 
 		if (mini.getType() == Miniature.Type.GALLERY) {
 
-			deleteFile(FOREGROUND_JPG);
-			try {
-				getFileStreamPath(FOREGROUND_JPG).createNewFile();
-			} catch (IOException e) {
-				// display an error message
-				String errorMessage = "We're are facing a problem using the storage :/";
-				Toast toast = Toast.makeText(this, errorMessage,
-						Toast.LENGTH_SHORT);
-				toast.show();
-				return;
-			}
+			// Intent cropIntent = new Intent("com.android.camera.action.CROP");
+			// TODO check available
 
 			Intent intent = new Intent();
 			intent.setType("image/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);
-			intent.putExtra("crop", "true");
-			intent.putExtra("aspectX", 1);
-			intent.putExtra("aspectY", 1);
-			intent.putExtra("outputX", 400);
-			intent.putExtra("outputY", 400);
-			intent.putExtra("scale", true);
-			intent.putExtra("noFaceDetection", true);
-			intent.putExtra("return-data", false);
-			intent.putExtra(MediaStore.EXTRA_OUTPUT,
-					getFileStreamPath(FOREGROUND_JPG));
-			intent.putExtra("outputFormat",
-					Bitmap.CompressFormat.JPEG.toString());
 
-			try {
-				startActivityForResult(
-						Intent.createChooser(intent, "Select Picture"),
-						PICK_IMAGE);
-			} catch (ActivityNotFoundException anfe) {
-				// display an error message
-				String errorMessage = "Unfortunately your device doesn't support the crop action";
-				Toast toast = Toast.makeText(this, errorMessage,
-						Toast.LENGTH_SHORT);
-				toast.show();
-				return;
-			}
+			startActivityForResult(
+					Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
 			return;
+
 		} else {
 			storeForegroundPreference(mini.getPreferenceValue(), mini.getType()
 					.ordinal());
@@ -187,15 +167,76 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		File file = new File(getFilesDir(), FOREGROUND_JPG);
 
 		if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+			Uri _uri = data.getData();
 
-			// custom foreground
-			File custom = getFileStreamPath(FOREGROUND_JPG);
-			storeForegroundPreference(custom.getAbsolutePath(),
+			Cursor cursor = getContentResolver()
+					.query(_uri,
+							new String[]{android.provider.MediaStore.Images.ImageColumns.DATA},
+							null, null, null);
+			cursor.moveToFirst();
+			String fileName = cursor.getString(0);
+			cursor.close();
+
+			Intent cropIntent = new Intent("com.android.camera.action.CROP");
+			cropIntent.setDataAndType(Uri.fromFile(new File(fileName)),
+					"image/*");
+			cropIntent.putExtra("crop", "true");
+			cropIntent.putExtra("aspectX", 1);
+			cropIntent.putExtra("aspectY", 1);
+			cropIntent.putExtra("scale", true);
+			cropIntent.putExtra("outputX", 400);
+			cropIntent.putExtra("outputY", 400);
+			cropIntent.putExtra("return-data", true);
+
+			startActivityForResult(cropIntent, CROP_IMAGE);
+
+			return;
+
+		} else if (requestCode == CROP_IMAGE
+				&& (resultCode == Activity.RESULT_OK || resultCode == Activity.RESULT_CANCELED)) {
+
+			if (data != null) {
+				Bundle extras = data.getExtras();
+				Bitmap selectedBitmap = extras.getParcelable("data");
+
+				FileOutputStream stream = null;
+				try {
+					file.delete();
+					file.createNewFile();
+
+					Bitmap cropped = cropToCircle(selectedBitmap);
+					selectedBitmap.recycle();
+
+					stream = openFileOutput(FOREGROUND_JPG,
+							Context.MODE_PRIVATE);
+					cropped.compress(Bitmap.CompressFormat.PNG, 90, stream);
+
+					cropped.recycle();
+
+				} catch (IOException e) {
+					Toast.makeText(this, R.string.error_crop, Toast.LENGTH_LONG)
+							.show();
+				} finally {
+					if (stream != null) {
+						try {
+							stream.close();
+						} catch (Throwable ignore) {
+						}
+					}
+				}
+			}
+
+			storeForegroundPreference(
+					String.valueOf(System.currentTimeMillis()),
 					Miniature.Type.GALLERY.ordinal());
 
+			super.finish();
+			return;
 		}
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -227,13 +268,41 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 *            app resources
 	 * @return bitmap resource for the blooba foreground
 	 */
-	public static final Bitmap getFrontBitmap(BloobaPreferencesWrapper prefs,
-			Resources resources) {
+	public static final Bitmap getFrontBitmap(Context context,
+			BloobaPreferencesWrapper prefs, Resources resources) {
 		if (prefs.isForegroundUserDefined()) {
-			return BitmapFactory.decodeFile(prefs.getForeground());
-		} else {
-			return BitmapFactory.decodeResource(resources,
-					BloobaForeground.resolveResource(prefs.getForeground()));
+			Bitmap bitmap = BitmapFactory.decodeFile(new File(context
+					.getFilesDir(), FOREGROUND_JPG).getAbsolutePath());
+			if (bitmap != null) {
+				return bitmap;
+			}
 		}
+
+		return BitmapFactory.decodeResource(resources,
+				BloobaForeground.resolveResource(prefs.getForeground()));
+	}
+
+	/**
+	 * Crop the given bitmap to a circle
+	 * 
+	 * @param bitmap
+	 *            squared circle
+	 * @return cropped bitmap
+	 */
+	private static Bitmap cropToCircle(Bitmap bitmap) {
+		final int width = bitmap.getWidth();
+		final int height = bitmap.getHeight();
+		final Bitmap outputBitmap = Bitmap.createBitmap(bitmap.getWidth(),
+				bitmap.getHeight(), Config.ARGB_8888);
+
+		final Path path = new Path();
+		path.addCircle((float) (width / 2), (float) (height / 2),
+				(float) Math.min(width, (height / 2)), Path.Direction.CCW);
+
+		final Canvas canvas = new Canvas(outputBitmap);
+		canvas.clipPath(path);
+		canvas.drawBitmap(bitmap, 0, 0, null);
+
+		return outputBitmap;
 	}
 }

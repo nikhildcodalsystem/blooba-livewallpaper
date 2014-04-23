@@ -79,6 +79,7 @@ public final class R {
         public static final int crop_foreground=0x7f060010;
         public static final int crop_foreground_summary=0x7f060011;
         public static final int enabletouch_settings=0x7f060004;
+        public static final int error_crop=0x7f060028;
         public static final int f_america=0x7f060021;
         public static final int f_basketball=0x7f06001f;
         public static final int f_bblack=0x7f060023;

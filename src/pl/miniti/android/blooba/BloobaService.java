@@ -178,6 +178,8 @@ public class BloobaService extends WallpaperService {
 			super.onSurfaceDestroyed(holder);
 			this.visible = false;
 			handler.removeCallbacks(this);
+			blooba.destroy();
+			blooba = null;
 		}
 
 		/*
@@ -318,16 +320,18 @@ public class BloobaService extends WallpaperService {
 			switch (fType) {
 				case REFLECTION :
 					return new ReflectionForegroundProvider(
-							BloobaForeground.getFrontBitmap(bloobaPreferences,
-									getResources()), this.background.get());
+							BloobaForeground.getFrontBitmap(
+									BloobaService.this.getApplicationContext(),
+									bloobaPreferences, getResources()),
+							this.background.get());
 				case IMAGE :
 				default :
 					return new ImageForegroundProvider(
-							BloobaForeground.getFrontBitmap(bloobaPreferences,
-									getResources()));
+							BloobaForeground.getFrontBitmap(
+									BloobaService.this.getApplicationContext(),
+									bloobaPreferences, getResources()));
 			}
 		}
-
 	}
 
 }
