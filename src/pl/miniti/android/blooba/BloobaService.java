@@ -261,9 +261,11 @@ public class BloobaService extends WallpaperService {
 
 					blooba.requestAnimationFrame(canvas);
 				}
+			} catch (IllegalStateException ignore) {
 			} finally {
-				if (canvas != null)
+				if (canvas != null) {
 					holder.unlockCanvasAndPost(canvas);
+				}
 			}
 			handler.removeCallbacks(this);
 			if (visible) {

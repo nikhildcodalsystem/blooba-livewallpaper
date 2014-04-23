@@ -1,0 +1,168 @@
+android.support.v4.app.BackStackState
+android.support.v4.app.BackStackState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.Fragment$SavedState
+android.support.v4.app.Fragment$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentManagerState
+android.support.v4.app.FragmentManagerState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentState
+android.support.v4.app.FragmentState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentTabHost: void setOnTabChangedListener(android.widget.TabHost$OnTabChangeListener)
+android.support.v4.app.FragmentTabHost$SavedState
+android.support.v4.app.FragmentTabHost$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status[] values()
+android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status valueOf(java.lang.String)
+android.support.v4.view.PagerTabStrip: void setTabIndicatorColor(int)
+android.support.v4.view.PagerTabStrip: void setTabIndicatorColorResource(int)
+android.support.v4.view.PagerTabStrip: int getTabIndicatorColor()
+android.support.v4.view.PagerTabStrip: void setTextSpacing(int)
+android.support.v4.view.PagerTabStrip: void setBackgroundDrawable(android.graphics.drawable.Drawable)
+android.support.v4.view.PagerTabStrip: void setBackgroundColor(int)
+android.support.v4.view.PagerTabStrip: void setBackgroundResource(int)
+android.support.v4.view.PagerTabStrip: void setDrawFullUnderline(boolean)
+android.support.v4.view.PagerTabStrip: boolean getDrawFullUnderline()
+android.support.v4.view.PagerTabStrip: int getMinHeight()
+android.support.v4.view.PagerTitleStrip: void setSingleLineAllCaps(android.widget.TextView)
+android.support.v4.view.PagerTitleStrip: void setTextSpacing(int)
+android.support.v4.view.PagerTitleStrip: int getTextSpacing()
+android.support.v4.view.PagerTitleStrip: void setNonPrimaryAlpha(float)
+android.support.v4.view.PagerTitleStrip: void setTextColor(int)
+android.support.v4.view.PagerTitleStrip: void setGravity(int)
+android.support.v4.view.PagerTitleStrip: int getMinHeight()
+android.support.v4.view.ViewPager: void setScrollState(int)
+android.support.v4.view.ViewPager: void setAdapter(android.support.v4.view.PagerAdapter)
+android.support.v4.view.ViewPager: android.support.v4.view.PagerAdapter getAdapter()
+android.support.v4.view.ViewPager: void setOnAdapterChangeListener(android.support.v4.view.ViewPager$OnAdapterChangeListener)
+android.support.v4.view.ViewPager: int getClientWidth()
+android.support.v4.view.ViewPager: void setCurrentItem(int)
+android.support.v4.view.ViewPager: int getCurrentItem()
+android.support.v4.view.ViewPager: void setOnPageChangeListener(android.support.v4.view.ViewPager$OnPageChangeListener)
+android.support.v4.view.ViewPager: void setChildrenDrawingOrderEnabledCompat(boolean)
+android.support.v4.view.ViewPager: int getOffscreenPageLimit()
+android.support.v4.view.ViewPager: void setOffscreenPageLimit(int)
+android.support.v4.view.ViewPager: void setPageMargin(int)
+android.support.v4.view.ViewPager: int getPageMargin()
+android.support.v4.view.ViewPager: void setPageMarginDrawable(android.graphics.drawable.Drawable)
+android.support.v4.view.ViewPager: void setPageMarginDrawable(int)
+android.support.v4.view.ViewPager: void setScrollingCacheEnabled(boolean)
+android.support.v4.view.ViewPager$SavedState
+android.support.v4.view.ViewPager$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.widget.DrawerLayout: void setScrimColor(int)
+android.support.v4.widget.DrawerLayout: void setDrawerListener(android.support.v4.widget.DrawerLayout$DrawerListener)
+android.support.v4.widget.DrawerLayout: void setDrawerLockMode(int)
+android.support.v4.widget.DrawerLayout$SavedState
+android.support.v4.widget.DrawerLayout$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.widget.SlidingPaneLayout: void setParallaxDistance(int)
+android.support.v4.widget.SlidingPaneLayout: int getParallaxDistance()
+android.support.v4.widget.SlidingPaneLayout: void setSliderFadeColor(int)
+android.support.v4.widget.SlidingPaneLayout: int getSliderFadeColor()
+android.support.v4.widget.SlidingPaneLayout: void setCoveredFadeColor(int)
+android.support.v4.widget.SlidingPaneLayout: int getCoveredFadeColor()
+android.support.v4.widget.SlidingPaneLayout: void setPanelSlideListener(android.support.v4.widget.SlidingPaneLayout$PanelSlideListener)
+android.support.v4.widget.SlidingPaneLayout: void setShadowDrawable(android.graphics.drawable.Drawable)
+android.support.v4.widget.SlidingPaneLayout: void setShadowResource(int)
+android.support.v4.widget.SlidingPaneLayout$SavedState
+android.support.v4.widget.SlidingPaneLayout$SavedState: android.os.Parcelable$Creator CREATOR
+pl.miniti.android.blooba.BloobaBackground
+pl.miniti.android.blooba.BloobaBackground: BloobaBackground()
+pl.miniti.android.blooba.BloobaForeground
+pl.miniti.android.blooba.BloobaForeground: BloobaForeground()
+pl.miniti.android.blooba.BloobaService
+pl.miniti.android.blooba.BloobaService: BloobaService()
+pl.miniti.android.blooba.BloobaSettings
+pl.miniti.android.blooba.BloobaSettings: BloobaSettings()
+pl.miniti.android.blooba.R$array: int quality
+pl.miniti.android.blooba.R$array: int qualityValues
+pl.miniti.android.blooba.R$array: int relax
+pl.miniti.android.blooba.R$array: int relaxValues
+pl.miniti.android.blooba.R$array: int size
+pl.miniti.android.blooba.R$array: int sizeValues
+pl.miniti.android.blooba.R$array: int speed
+pl.miniti.android.blooba.R$array: int speedValues
+pl.miniti.android.blooba.R$drawable: int america
+pl.miniti.android.blooba.R$drawable: int america_xs
+pl.miniti.android.blooba.R$drawable: int balloon_black
+pl.miniti.android.blooba.R$drawable: int balloon_black_xs
+pl.miniti.android.blooba.R$drawable: int balloon_pink
+pl.miniti.android.blooba.R$drawable: int balloon_pink_xs
+pl.miniti.android.blooba.R$drawable: int basketball
+pl.miniti.android.blooba.R$drawable: int basketball_xs
+pl.miniti.android.blooba.R$drawable: int bg_beach
+pl.miniti.android.blooba.R$drawable: int bg_beach_xs
+pl.miniti.android.blooba.R$drawable: int bg_boards
+pl.miniti.android.blooba.R$drawable: int bg_boards_xs
+pl.miniti.android.blooba.R$drawable: int bg_green
+pl.miniti.android.blooba.R$drawable: int bg_green_xs
+pl.miniti.android.blooba.R$drawable: int bg_stars
+pl.miniti.android.blooba.R$drawable: int bg_stars_xs
+pl.miniti.android.blooba.R$drawable: int bg_underwater
+pl.miniti.android.blooba.R$drawable: int bg_underwater_xs
+pl.miniti.android.blooba.R$drawable: int bubble
+pl.miniti.android.blooba.R$drawable: int bubble_xs
+pl.miniti.android.blooba.R$drawable: int donut
+pl.miniti.android.blooba.R$drawable: int donut_xs
+pl.miniti.android.blooba.R$drawable: int earth
+pl.miniti.android.blooba.R$drawable: int earth_xs
+pl.miniti.android.blooba.R$drawable: int gallery_xs
+pl.miniti.android.blooba.R$drawable: int ic_launcher
+pl.miniti.android.blooba.R$drawable: int kenny
+pl.miniti.android.blooba.R$drawable: int kenny_xs
+pl.miniti.android.blooba.R$drawable: int moon
+pl.miniti.android.blooba.R$drawable: int moon_xs
+pl.miniti.android.blooba.R$drawable: int nemo
+pl.miniti.android.blooba.R$drawable: int nemo_xs
+pl.miniti.android.blooba.R$drawable: int penny
+pl.miniti.android.blooba.R$drawable: int penny_xs
+pl.miniti.android.blooba.R$drawable: int spider
+pl.miniti.android.blooba.R$drawable: int spider_xs
+pl.miniti.android.blooba.R$drawable: int squish
+pl.miniti.android.blooba.R$drawable: int squish_xs
+pl.miniti.android.blooba.R$drawable: int water_xs
+pl.miniti.android.blooba.R$id: int grid_view
+pl.miniti.android.blooba.R$layout: int grid_layout
+pl.miniti.android.blooba.R$string: int app_description
+pl.miniti.android.blooba.R$string: int app_name
+pl.miniti.android.blooba.R$string: int b_beach
+pl.miniti.android.blooba.R$string: int b_boards
+pl.miniti.android.blooba.R$string: int b_green
+pl.miniti.android.blooba.R$string: int b_stars
+pl.miniti.android.blooba.R$string: int b_underwater
+pl.miniti.android.blooba.R$string: int blooba_settings
+pl.miniti.android.blooba.R$string: int crop_foreground
+pl.miniti.android.blooba.R$string: int crop_foreground_summary
+pl.miniti.android.blooba.R$string: int enabletouch_settings
+pl.miniti.android.blooba.R$string: int error_crop
+pl.miniti.android.blooba.R$string: int f_america
+pl.miniti.android.blooba.R$string: int f_basketball
+pl.miniti.android.blooba.R$string: int f_bblack
+pl.miniti.android.blooba.R$string: int f_bpink
+pl.miniti.android.blooba.R$string: int f_bubble
+pl.miniti.android.blooba.R$string: int f_donut
+pl.miniti.android.blooba.R$string: int f_earth
+pl.miniti.android.blooba.R$string: int f_kenny
+pl.miniti.android.blooba.R$string: int f_moon
+pl.miniti.android.blooba.R$string: int f_nemo
+pl.miniti.android.blooba.R$string: int f_penny
+pl.miniti.android.blooba.R$string: int f_spider
+pl.miniti.android.blooba.R$string: int f_squishy
+pl.miniti.android.blooba.R$string: int f_water
+pl.miniti.android.blooba.R$string: int general_settings
+pl.miniti.android.blooba.R$string: int invertgravity_settings
+pl.miniti.android.blooba.R$string: int own
+pl.miniti.android.blooba.R$string: int quality_settings
+pl.miniti.android.blooba.R$string: int quality_summary
+pl.miniti.android.blooba.R$string: int relax_settings
+pl.miniti.android.blooba.R$string: int relax_summary
+pl.miniti.android.blooba.R$string: int select_background
+pl.miniti.android.blooba.R$string: int select_background_summary
+pl.miniti.android.blooba.R$string: int select_foreground
+pl.miniti.android.blooba.R$string: int select_foreground_summary
+pl.miniti.android.blooba.R$string: int size_settings
+pl.miniti.android.blooba.R$string: int size_summary
+pl.miniti.android.blooba.R$string: int speed_settings
+pl.miniti.android.blooba.R$string: int speed_summary
+pl.miniti.android.blooba.R$style: int AppBaseTheme
+pl.miniti.android.blooba.R$style: int AppTheme
+pl.miniti.android.blooba.R$xml: int blooba
+pl.miniti.android.blooba.R$xml: int blooba_settings
+pl.miniti.android.blooba.preferences.Miniature$Type: pl.miniti.android.blooba.preferences.Miniature$Type[] values()
+pl.miniti.android.blooba.preferences.Miniature$Type: pl.miniti.android.blooba.preferences.Miniature$Type valueOf(java.lang.String)
