@@ -89,7 +89,7 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 	 *            name of the resource
 	 * @return bitmap identifier
 	 */
-	public static int resolveResource(String name) {
+	private static int resolveResource(String name) {
 
 		for (Miniature m : minis) {
 			if (name.equals(m.getPreferenceValue())) {

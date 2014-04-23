@@ -82,7 +82,7 @@ public class BloobaService extends WallpaperService {
 		private int height;
 
 		/**
-		 * 
+		 * Default constructor for the blooba engine
 		 */
 		private BloobaEngine() {
 			SharedPreferences preferences = PreferenceManager
@@ -126,6 +126,7 @@ public class BloobaService extends WallpaperService {
 				newBlooba();
 			}
 		}
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -248,8 +249,9 @@ public class BloobaService extends WallpaperService {
 				handler.postDelayed(drawRunner, 41);
 			}
 		}
+
 		/**
-		 *  
+		 * Create a brand new blooba
 		 */
 		private void newBlooba() {
 			if (blooba != null) {
@@ -279,7 +281,7 @@ public class BloobaService extends WallpaperService {
 		}
 
 		/**
-		 *  
+		 * Load a new background based on the user preferences
 		 */
 		private void loadBackground() {
 			background = BloobaBackground.getBitmap(getResources(),
@@ -287,7 +289,9 @@ public class BloobaService extends WallpaperService {
 		}
 
 		/**
-		 * @return
+		 * Create a new foreground provider based on user preferences
+		 * 
+		 * @return initialized foreground provider instance
 		 */
 		private ForegroundProvider getForegroundProvider() {
 			Miniature.Type fType = Miniature.Type.values()[bloobaPreferences
