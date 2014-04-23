@@ -64,22 +64,39 @@ public class BloobaService extends WallpaperService {
 	private class BloobaEngine extends Engine
 			implements
 				SensorEventListener,
-				OnSharedPreferenceChangeListener {
+				OnSharedPreferenceChangeListener,
+				Runnable {
+
+		/**
+		 * OS handler
+		 */
 		private final Handler handler = new Handler();
-		private final Runnable drawRunner = new Runnable() {
 
-			@Override
-			public void run() {
-				draw();
-			}
-
-		};
+		/**
+		 * Bloona instance
+		 */
 		private Blooba blooba;
+
+		/**
+		 * User preferences wrapper in an adapter
+		 */
 		private BloobaPreferencesWrapper bloobaPreferences;
+
+		/**
+		 * Determines if the service is currently visible or not. If false
+		 * animation is not performed.
+		 */
 		private boolean visible = true;
+
+		/**
+		 * Currently displayed background bitmap
+		 */
 		private SoftReference<Bitmap> background;
-		private int width;
-		private int height;
+
+		/**
+		 * Current canvas size
+		 */
+		private int width, height;
 
 		/**
 		 * Default constructor for the blooba engine
@@ -88,7 +105,7 @@ public class BloobaService extends WallpaperService {
 			SharedPreferences preferences = PreferenceManager
 					.getDefaultSharedPreferences(BloobaService.this);
 			preferences.registerOnSharedPreferenceChangeListener(this);
-			handler.post(drawRunner);
+			handler.post(this);
 		}
 
 		/*
@@ -138,13 +155,13 @@ public class BloobaService extends WallpaperService {
 		public void onVisibilityChanged(boolean visible) {
 			this.visible = visible;
 			if (visible) {
-				handler.post(drawRunner);
+				handler.post(this);
 				if (gravitySensor != null) {
 					sensorManager.registerListener(this, gravitySensor,
 							SensorManager.SENSOR_DELAY_FASTEST);
 				}
 			} else {
-				handler.removeCallbacks(drawRunner);
+				handler.removeCallbacks(this);
 				sensorManager.unregisterListener(this);
 			}
 		}
@@ -160,7 +177,7 @@ public class BloobaService extends WallpaperService {
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
 			this.visible = false;
-			handler.removeCallbacks(drawRunner);
+			handler.removeCallbacks(this);
 		}
 
 		/*
@@ -221,11 +238,13 @@ public class BloobaService extends WallpaperService {
 			}
 		}
 
-		/**
-		 * Renders the background and invokes Blooba callback. Afterwards a new
-		 * rendering frame will be requested by the engine.
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
 		 */
-		private void draw() {
+		@Override
+		public void run() {
 			SurfaceHolder holder = getSurfaceHolder();
 			Canvas canvas = null;
 			try {
@@ -244,9 +263,9 @@ public class BloobaService extends WallpaperService {
 				if (canvas != null)
 					holder.unlockCanvasAndPost(canvas);
 			}
-			handler.removeCallbacks(drawRunner);
+			handler.removeCallbacks(this);
 			if (visible) {
-				handler.postDelayed(drawRunner, 41);
+				handler.postDelayed(this, 41);
 			}
 		}
 
