@@ -10,6 +10,7 @@ package pl.miniti.android.blooba;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import pl.miniti.android.blooba.base.BloobaPreferencesWrapper;
 import pl.miniti.android.blooba.base.Preferences;
@@ -20,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -27,6 +29,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -140,9 +143,6 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 
 		if (mini.getType() == Miniature.Type.GALLERY) {
 
-			// Intent cropIntent = new Intent("com.android.camera.action.CROP");
-			// TODO check available
-
 			Intent intent = new Intent();
 			intent.setType("image/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -190,6 +190,53 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 			cropIntent.putExtra("outputX", 400);
 			cropIntent.putExtra("outputY", 400);
 			cropIntent.putExtra("return-data", true);
+
+			List<ResolveInfo> list = getPackageManager().queryIntentActivities(
+					cropIntent, 0);
+			if (list.size() == 0) {
+
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inJustDecodeBounds = true;
+				BitmapFactory.decodeFile(fileName, options);
+
+				final int h = options.outHeight;
+				final int w = options.outWidth;
+				int inSampleSize = 1;
+
+				if (h > 400 || w > 400) {
+					final int halfHeight = h / 2;
+					final int halfWidth = w / 2;
+					while ((halfHeight / inSampleSize) > 400
+							&& (halfWidth / inSampleSize) > 400) {
+						inSampleSize *= 2;
+					}
+				}
+
+				options = new BitmapFactory.Options();
+				options.inSampleSize = inSampleSize;
+				Bitmap picBitmap = BitmapFactory.decodeFile(fileName, options);
+
+				Bitmap finalBitmap = cropToCircle(picBitmap);
+
+				FileOutputStream stream = null;
+
+				try {
+					stream = openFileOutput(FOREGROUND_JPG,
+							Context.MODE_PRIVATE);
+					finalBitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+
+					picBitmap.recycle();
+
+					storeForegroundPreference(
+							String.valueOf(System.currentTimeMillis()),
+							Miniature.Type.GALLERY.ordinal());
+				} catch (IOException e) {
+					Toast.makeText(this, R.string.error_crop, Toast.LENGTH_LONG)
+							.show();
+				}
+
+				return;
+			}
 
 			startActivityForResult(cropIntent, CROP_IMAGE);
 
@@ -297,11 +344,12 @@ public class BloobaForeground extends Activity implements OnItemClickListener {
 
 		final Path path = new Path();
 		path.addCircle((float) (width / 2), (float) (height / 2),
-				(float) Math.min(width, (height / 2)), Path.Direction.CCW);
+				(float) Math.min(width / 2, height / 2), Path.Direction.CCW);
 
 		final Canvas canvas = new Canvas(outputBitmap);
 		canvas.clipPath(path);
-		canvas.drawBitmap(bitmap, 0, 0, null);
+		canvas.drawBitmap(bitmap, new Rect(0, 0, width, height), new Rect(0, 0,
+				width, height), null);
 
 		return outputBitmap;
 	}
