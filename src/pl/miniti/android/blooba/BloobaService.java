@@ -73,7 +73,7 @@ public class BloobaService extends WallpaperService {
 		private final Handler handler = new Handler();
 
 		/**
-		 * Bloona instance
+		 * Blooba instance
 		 */
 		private Blooba blooba;
 
