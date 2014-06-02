@@ -25,13 +25,11 @@
         <item>very</item>
         <item>so-so</item>
         <item>just right</item>
-        <item>follows battery</item>
     </string-array>
     <string-array name="relaxValues">
         <item>0.2</item>
         <item>0.5</item>
         <item>0.9</item>
-        <item>0</item>
     </string-array>
     <string-array name="speed">
         <item>slow</item>
