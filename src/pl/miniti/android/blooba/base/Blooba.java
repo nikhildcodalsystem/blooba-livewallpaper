@@ -30,7 +30,7 @@ public class Blooba {
 	private static final float mouseRad = 10f;
 	private static final int resolution = 10;
 
-	private double[] x, y, xLast, yLast, ax, ay;
+	private double[] x, y, xLast, yLast;
 	private double blobAreaTarget;
 	private double sideLength;
 	private int width;
@@ -81,8 +81,6 @@ public class Blooba {
 		y = new double[nParts];
 		xLast = new double[nParts];
 		yLast = new double[nParts];
-		ax = new double[nParts];
-		ay = new double[nParts];
 
 		// intialize number of points around a circle (as many as required
 		// according to the blob quality)
@@ -94,8 +92,6 @@ public class Blooba {
 			y[i] = cy + Math.cos(ang) * radius / resolution;
 			xLast[i] = x[i];
 			yLast[i] = y[i];
-			ax[i] = 0;
-			ay[i] = 0;
 		}
 
 		// calculate length of the blob side
@@ -214,12 +210,10 @@ public class Blooba {
 		for (int i = 0; i < nParts; ++i) {
 			double bufferX = x[i];
 			double bufferY = y[i];
-			x[i] = 2 * x[i] - xLast[i] + ax[i] * dtSquared + gravityAddX;
-			y[i] = 2 * y[i] - yLast[i] + ay[i] * dtSquared + gravityAddY;
+			x[i] = 2 * x[i] - xLast[i] + gravityAddX;
+			y[i] = 2 * y[i] - yLast[i] + gravityAddY;
 			xLast[i] = bufferX;
 			yLast[i] = bufferY;
-			ax[i] = 0;
-			ay[i] = 0;
 		}
 	}
 
