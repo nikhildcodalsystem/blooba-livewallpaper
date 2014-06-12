@@ -25,24 +25,86 @@ import android.view.MotionEvent;
 public class Blooba {
 
 	private static final float EPS = 0.0001f;
+
 	private static final double tStep = 1.0 / 10.0;
+
+	/**
+	 * Number of iterations during blooba calculations
+	 */
 	private static final int perimIters = 5;
+
+	/**
+	 * Radius of the mouse during the touch event
+	 */
 	private static final float mouseRad = 10f;
+
 	private static final int resolution = 10;
 
 	private double[] x, y, xLast, yLast;
+
+	/**
+	 * Area of the blooba
+	 */
 	private double blobAreaTarget;
+
+	/**
+	 * Length of the blooba side
+	 */
 	private double sideLength;
+
+	/**
+	 * Screen width
+	 */
 	private int width;
+
+	/**
+	 * Screen height
+	 */
 	private int height;
+
+	/**
+	 * Blooba radius
+	 */
 	private int radius;
+
+	/**
+	 * Registered mouse position for touch events
+	 */
 	private float[] mousePos;
+
+	/**
+	 * Current Y gravity factor
+	 */
 	private float gravityForceY = 9.8f;
+
+	/**
+	 * Current X gravity factor
+	 */
 	private float gravityForceX = 0;
+
+	/**
+	 * Describes squishiness of the blooba
+	 */
 	private float relaxFactor;
+
+	/**
+	 * Number of blooba points used in rendering
+	 */
 	private int nParts;
+
+	/**
+	 * Determines if the gravity works upwards or downwards
+	 */
 	private boolean invertGravity;
+
+	/**
+	 * Animation speed
+	 */
 	private int speed;
+
+	/**
+	 * Class providing the foreground bitmap
+	 */
 	private ForegroundProvider fProvider;
 
 	/**

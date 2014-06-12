@@ -14,15 +14,54 @@ import android.content.SharedPreferences;
  */
 public class BloobaPreferencesWrapper {
 
+	/**
+	 * If true blooba registers touch events
+	 */
 	private boolean touchEnabled;
+
+	/**
+	 * If true the Y gravity is upwards
+	 */
 	private boolean gravityInverted;
+
+	/**
+	 * Number of blooba points used in rendering
+	 */
 	private int quality;
+
+	/**
+	 * Speed of the animation
+	 */
 	private int speed;
+
+	/**
+	 * Size of the blooba
+	 */
 	private float size;
+
+	/**
+	 * Describes squishiness of the blooba
+	 */
 	private float relaxFactor;
+
+	/**
+	 * Foreground resource id
+	 */
 	private String foreground;
+
+	/**
+	 * Type of the foreground resource. See {@see Miniature.Type}
+	 */
 	private int foregroundType;
+
+	/**
+	 * Background resource id
+	 */
 	private String background;
+
+	/**
+	 * Type of the background resource. See {@see Miniature.Type}
+	 */
 	private int backgroundType;
 
 	/**
